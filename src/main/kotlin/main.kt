@@ -21,6 +21,15 @@ suspend fun main(args: Array<String>) {
             gson()
         }
 
+        install(CORS) {
+            method(HttpMethod.Get)
+            header(HttpHeaders.AccessControlAllowHeaders)
+            header(HttpHeaders.ContentType)
+            header(HttpHeaders.AccessControlAllowOrigin)
+            allowCredentials = true
+            anyHost()
+        }
+
         routing {
             get("/") {
                 call.respondText("Hello, world!")
