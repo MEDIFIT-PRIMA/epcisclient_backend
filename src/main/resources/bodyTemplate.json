@@ -1,0 +1,84 @@
+{
+  "@context": [
+    "https://gs1.github.io/EPCIS/epcis-context.jsonld",
+    {
+      "fsk": "https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json"
+    }
+  ],
+  "id": "_:document1",
+  "isA": "EPCISDocument",
+  "schemaVersion": "2.0",
+  "creationDate": "2021-03-03T11:30:47.0Z",
+  "format": "application/ld+json",
+  "epcisBody": {
+    "eventList": [
+      {
+        "isA": "ObjectEvent",
+        "action": "OBSERVE",
+        "bizStep": "urn:epcglobal:cbv:bizstep:collecting",
+        "disposition": "urn:epcglobal:cbv:disp:in_transit",
+        "epcList": [
+          "urn:epc:id:sgtin:0614141.107346.2017",
+          "urn:epc:id:sgtin:0614141.107346.2018"
+        ],
+        "eventTime": "2021-03-14T20:33:31.116000-06:00",
+        "eventTimeZoneOffset": "-06:00",
+        "readPoint": {
+          "id": "urn:epc:id:sgln:0614141.07346.1234"
+        },
+        "bizTransactionList": [
+          {
+            "type": "urn:epcglobal:cbv:btt:po",
+            "bizTransaction": "http://transaction.acme.com/po/12345678"
+          }
+        ],
+        "fsk:model": {
+          "fsk:modelType": "PredictiveModel",
+          "fsk:generalInformation": {
+            "fsk:name": "Milk",
+            "fsk:identifier": "Color",
+            "fsk:creationDate": "2021-03-03T11:30:47.0Z",
+            "fsk:rights": "Given",
+            "fsk:reference": [
+              {
+                "fsk:isReferenceDescription": "true",
+                "fsk:doi": "DOI",
+                "fsk:title": "Dabur"
+              }
+            ],
+            "fsk:languageWrittenIn": "R"
+          },
+          "fsk:scope": {
+            "fsk:product": [
+              {
+                "fsk:name": "food product",
+                "fsk:unit": "Child"
+              }
+            ],
+            "fsk:hazard": [
+              {
+                "fsk:name": "Sugar"
+              }
+            ]
+          },
+          "fsk:dataBackground": {
+            "fsk:study": {
+              "fsk:title": "Title of study"
+            }
+          },
+          "fsk:modelMath": {
+            "fsk:parameter": [
+              {
+                "fsk:id": "UFGH456",
+                "fsk:classification": "CONSTANT",
+                "fsk:unit": "BeeProd",
+                "fsk:name": "Queen",
+                "fsk:dataType": "INTEGER"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
