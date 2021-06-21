@@ -54,10 +54,10 @@ fun Application.module(testing: Boolean = false) {
         }
 
         /*
- * Upload metadata from passed model file.
- * Body parameter: form data.
- * - file: Binary object
- */
+         * Upload metadata from passed model file.
+         * Body parameter: form data.
+         * - file: Binary object
+         */
         post("/upload") {
             val multipartData = call.receiveMultipart()
 
@@ -156,28 +156,6 @@ private suspend fun uploadModel(client: HttpClient, bodyParameter: JsonNode) {
 
     // TODO: process response code
     println("/capture response code: ${response.status}")
-}
-
-private fun readMetadata(file: File, objectMapper: ObjectMapper): JsonNode {
-    CombineArchive(file).use { archive ->
-        val jsonUri = FSKML.getURIS(1, 0, 12)["json"]!!
-
-        val jsonString = archive.getEntriesWithFormat(jsonUri)
-            .first { it.fileName == "metaData.json" }
-            .loadTextEntry()
-
-        return objectMapper.readTree(jsonString)
-    }
-}
-
-private fun ArchiveEntry.loadTextEntry(): String {
-    val tempFile = createTempFile()
-    return try {
-        extractFile(tempFile)
-        tempFile.readText()
-    } finally {
-        tempFile.delete()
-    }
 }
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
