@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "402cb16f-2f92-4bc5-b934-fd79a2d14ad8",
+		"name": "OpenEPCIS tests",
+		"description": "Tests for the OpenEPCIS client",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/capture",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/models",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/models",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "Model file",
+							"type": "file",
+							"src": "/Users/malba/Documents/GitHub/fskx_validator/testresources/broken_model.fskx"
+						},
+						{
+							"key": "user",
+							"value": "postman",
+							"description": "User name",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"upload"
+					]
+				},
+				"description": "Example for FSKX validator"
+			},
+			"response": []
+		},
+		{
+			"name": "CustomCapture GI",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"@context\": [\n        \"https://gs1.github.io/EPCIS/epcis-context.jsonld\",\n        {\n            \"fsk\": \"https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json\"\n        }\n    ],\n    \"id\": \"_:document1\",\n    \"isA\": \"EPCISDocument\",\n    \"schemaVersion\": \"2.0\",\n    \"creationDate\": \"2021-03-03T11:30:47.0Z\",\n    \"format\": \"application/ld+json\",\n    \"epcisBody\": {\n        \"eventList\": [\n            {\n                \"isA\": \"ObjectEvent\",\n                \"action\": \"OBSERVE\",\n                \"bizStep\": \"urn:epcglobal:cbv:bizstep:collecting\",\n                \"disposition\": \"urn:epcglobal:cbv:disp:in_transit\",\n                \"epcList\": [\n                    \"urn:epc:id:sgtin:0614141.107346.2017\",\n                    \"urn:epc:id:sgtin:0614141.107346.2018\"\n                ],\n                \"eventTime\": \"2021-03-14T20:33:31.116000-06:00\",\n                \"eventTimeZoneOffset\": \"-06:00\",\n                \"readPoint\": {\n                    \"id\": \"urn:epc:id:sgln:0614141.07346.1234\"\n                },\n                \"bizTransactionList\": [\n                    {\n                        \"type\": \"urn:epcglobal:cbv:btt:po\",\n                        \"bizTransaction\": \"http://transaction.acme.com/po/12345678\"\n                    }\n                ],\n                \"fsk:model\": {\n                    \"fsk:modelType\": \"GenericModel\",\n                    \"fsk:generalInformation\": {\n                        \"fsk:name\": \"Toy Model\",\n                        \"fsk:source\": \"EVENTS (MEETING OR CONFERENCE)\",\n                        \"fsk:identifier\": \"toymodel\"\n                    },\n                    \"fsk:scope\": {\n                        \"fsk:product\": [\n                            {\n                                \"fsk:name\": \"food product\",\n                                \"fsk:unit\": \"Everyone\"\n                            }\n                        ],\n                        \"fsk:hazard\": [\n                            {\n                                \"fsk:name\": \"Hg\"\n                            }\n                        ],\n                        \"fsk:populationGroup\": [\n                            {\n                                \"fsk:name\": \"Adult\"\n                            }\n                        ]\n                    },\n                    \"fsk:dataBackground\": {\n                        \"fsk:study\": {\n                            \"fsk:title\": \"Title of study\"\n                        }\n                    },\n                    \"fsk:modelMath\": {\n                        \"fsk:parameter\": [\n                            {\n                                \"fsk:id\": \"UFGH456\",\n                                \"fsk:classification\": \"CONSTANT\",\n                                \"fsk:unit\": \"BeeProd\",\n                                \"fsk:name\": \"Queen\",\n                                \"fsk:dataType\": \"INTEGER\"\n                            }\n                        ],\n                        \"fsk:exposure\": [\n                            {\n                                \"fsk:type\": \"Harmful Radiation\"\n                            }\n                        ]\n                    }\n                }\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/capture",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"capture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CustomCapture full",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"@context\": [\n        \"https://gs1.github.io/EPCIS/epcis-context.jsonld\",\n        {\n            \"fsk\": \"https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json\"\n        }\n    ],\n    \"id\": \"_:document1\",\n    \"isA\": \"EPCISDocument\",\n    \"schemaVersion\": \"2.0\",\n    \"creationDate\": \"2021-03-03T11:30:47.0Z\",\n    \"format\": \"application/ld+json\",\n    \"epcisBody\": {\n        \"eventList\": [\n            {\n                \"isA\": \"ObjectEvent\",\n                \"action\": \"OBSERVE\",\n                \"bizStep\": \"urn:epcglobal:cbv:bizstep:collecting\",\n                \"disposition\": \"urn:epcglobal:cbv:disp:in_transit\",\n                \"epcList\": [\n                    \"urn:epc:id:sgtin:0614141.107346.2017\",\n                    \"urn:epc:id:sgtin:0614141.107346.2018\"\n                ],\n                \"eventTime\": \"2021-03-14T20:33:31.116000-06:00\",\n                \"eventTimeZoneOffset\": \"-06:00\",\n                \"readPoint\": {\n                    \"id\": \"urn:epc:id:sgln:0614141.07346.1234\"\n                },\n                \"bizTransactionList\": [\n                    {\n                        \"type\": \"urn:epcglobal:cbv:btt:po\",\n                        \"bizTransaction\": \"http://transaction.acme.com/po/12345678\"\n                    }\n                ],\n                \"fsk:model\": {\n                    \"fsk:modelType\": \"GenericModel\",\n                    \"fsk:generalInformation\": {\n                        \"fsk:name\": \"Toy Model\",\n                        \"fsk:source\": \"EVENTS (MEETING OR CONFERENCE)\",\n                        \"fsk:identifier\": \"toymodel\",\n                        \"fsk:author\": [\n                            {\n                                \"fsk:title\": \"Dr\",\n                                \"fsk:familyName\": \"Doe\",\n                                \"fsk:givenName\": \"Jane\",\n                                \"fsk:email\": \"janedoe@gmail.com\",\n                                \"fsk:telephone\": \"080 12345566\",\n                                \"fsk:streetAddress\": \"Berliner Strasse 2\",\n                                \"fsk:country\": \"Germany\",\n                                \"fsk:region\": \"Berlin-Brandenburg\",\n                                \"fsk:gender\": \"female\",\n                                \"fsk:organization\": \"NYU\"\n                            }\n                        ],\n                        \"fsk:creator\": [\n                            {\n                                \"fsk:title\": \"Dr.\",\n                                \"fsk:familyName\": \"Smith\",\n                                \"fsk:givenName\": \"John\",\n                                \"fsk:email\": \"johnsmith@mail.com\",\n                                \"fsk:telephone\": \"030 12345\",\n                                \"fsk:streetAddress\": \"Nahmitzer Damm 40\",\n                                \"fsk:country\": \"Germany\",\n                                \"fsk:region\": \"Berlin-Brandenburg\",\n                                \"fsk:organization\": \"BfR\"\n                            },\n                            {\n                                \"fsk:title\": \"Mr.\",\n                                \"fsk:familyName\": \"Clarke\",\n                                \"fsk:givenName\": \"Jason\",\n                                \"fsk:email\": \"clarke@mymail.com\",\n                                \"fsk:telephone\": \"03301 1369158\",\n                                \"fsk:streetAddress\": \"Mainstreet\",\n                                \"fsk:country\": \"United States\",\n                                \"fsk:region\": \"Brandenburg\",\n                                \"fsk:organization\": \"BfR\"\n                            }\n                        ],\n                        \"fsk:rights\": \"false\",\n                        \"fsk:url\": \"\",\n                        \"fsk:format\": \".fskx\",\n                        \"fsk:reference\": [\n                            {\n                                \"fsk:isReferenceDescription\": true,\n                                \"fsk:date\": \"1905-07-01\",\n                                \"fsk:doi\": \"10.5072/zenodo.168114\",\n                                \"fsk:authorList\": \"Jack Bauer, Kiefer Sutherland\",\n                                \"fsk:title\": \"Quantitative Risk Assessment in Food Establishments: Evaluating Strategies and Behavior on the Risk Associated with Fats in Foods\",\n                                \"fsk:abstract\": \"This research looks at the work of Margaret C. Anderson, the editor of the Little Review.  The review published first works by Sherwood Anderson, James Joyce, Wyndham Lewis, and Ezra Pound.  This research draws upon mostly primary sources including memoirs, published letters, and a complete collection of the Little Review. Most prior research on Anderson focuses on her connection to the famous writers and personalities that she published and associated with.  This focus undermines her role as the dominant creative force behind one of the most influential little magazines published in the 20th Century. This case example shows how little magazine publishing is arguably a literary art\",\n                                \"fsk:volume\": \"0\",\n                                \"fsk:issue\": \"0\",\n                                \"fsk:status\": \"Accepted\",\n                                \"fsk:website\": \"https://www.nature.com\"\n                            },\n                            {\n                                \"fsk:isReferenceDescription\": true,\n                                \"fsk:date\": \"1905-07-06\",\n                                \"fsk:doi\": \"10.1002/zenodo.211137\",\n                                \"fsk:authorList\": \"James Bond, Timothy Dalton\",\n                                \"fsk:title\": \"Norwalk virus: How infectious is it?\",\n                                \"fsk:abstract\": \"This project involves discovering how the American Revolution was remembered during the nineteenth century.  The goal is to show that the American Revolution was memorialized by the actions of the United States government during the 1800s. This has been done by examining events such as the Supreme Court cases of John Marshall and the Nullification Crisis. Upon examination of these events, it becomes clear that John Marshall and John Calhoun (creator of the Doctrine of Nullification) attempted to use the American Revolution to bolster their claims by citing speeches from Founding Fathers. Through showing that the American Revolution lives on in memory, this research highlights the importance of the revolution in shaping the actions of the United States government.\",\n                                \"fsk:volume\": \"0\",\n                                \"fsk:issue\": \"0\",\n                                \"fsk:status\": \"Legal\",\n                                \"fsk:website\": \"www.sciencemag.org\"\n                            },\n                            {\n                                \"fsk:isReferenceDescription\": true,\n                                \"fsk:date\": \"1905-07-07\",\n                                \"fsk:doi\": \"10.1111/j.153xxx924.1999.tb01143.x\",\n                                \"fsk:authorList\": \"Jack Ryan, Alec Baldwin, Harrison Ford\",\n                                \"fsk:title\": \"Dose Response Models For Infectious Gastronomies\",\n                                \"fsk:abstract\": \"The purpose of this research is to identify a subtype of autism called Developmental Verbal Dyspraxia (DVD).  DVD is a motor-speech problem, disabling oral-motor movements needed for speaking. The first phase of the project involves a screening interview where we identify DVD and Non-DVD kids.  We also use home videos to validate answers on the screening interview.  The final phase involves home visits where we use several assessments to confirm the child’s diagnosis and examine the connection between manual and oral motor challenges. By identifying DVD as a subtype of Autism, we will eliminate the assumption that all Autistics have the same characteristics. This will allow for more individual consideration of Autistic people and may direct future research on the genetic factors in autism.\",\n                                \"fsk:volume\": \"0\",\n                                \"fsk:issue\": \"0\",\n                                \"fsk:status\": \"Peer reviewed\",\n                                \"fsk:website\": \"http://www.techbriefs.com\"\n                            }\n                        ],\n                        \"fsk:language\": \"English\",\n                        \"fsk:status\": \"Uncurated\",\n                        \"fsk:objective\": \"This model can be used for tutorial purpose.\",\n                        \"fsk:description\": \"This model was generated as an example.\"\n                    },\n                    \"fsk:scope\": {\n                        \"fsk:product\": [\n                            {\n                                \"fsk:name\": \"Oranges\",\n                                \"fsk:description\": \"orange color\",\n                                \"fsk:unit\": \"Meal\",\n                                \"fsk:method\": [\n                                    \"Organic production\"\n                                ],\n                                \"fsk:packaging\": [\n                                    \"Not packed (loose; open)\"\n                                ],\n                                \"fsk:treatment\": [\n                                    \"Juicing\"\n                                ],\n                                \"fsk:originCountry\": \"Italy\",\n                                \"fsk:originArea\": \"Bologna\",\n                                \"fsk:fisheriesArea\": \"Azores Grounds\",\n                                \"fsk:productionDate\": \"2011-10-29\",\n                                \"fsk:expiryDate\": \"2011-11-30\"\n                            }\n                        ],\n                        \"fsk:hazard\": [\n                            {\n                                \"fsk:type\": \"Pesticide residues\",\n                                \"fsk:name\": \"Thiabendazole\",\n                                \"fsk:description\": \"powder\",\n                                \"fsk:unit\": \"mg/kg\",\n                                \"fsk:adverseEffect\": \"washing\",\n                                \"fsk:sourceOfContamination\": \"spray\",\n                                \"fsk:maximumResidueLimit\": \"0.01 mg/kg\",\n                                \"fsk:noObservedAdverseAffectLevel\": \"10 mg\",\n                                \"fsk:lowestObservedAdverseAffectLevel\": \"40 mg\",\n                                \"fsk:acceptableOperatorsExposureLevel\": \"50 mg\",\n                                \"fsk:acuteReferenceDose\": \"80 mg\",\n                                \"fsk:acceptableDailyIntake\": \"20 mg\"\n                            }\n                        ],\n                        \"fsk:generalComment\": \"workshop example with fictitious data\",\n                        \"fsk:temporalInformation\": \"1990 - 2000\"\n                    },\n                    \"fsk:dataBackground\": {\n                        \"fsk:study\": {\n                            \"fsk:identifier\": \"workshop_example_05132019\",\n                            \"fsk:title\": \"FSK-Lab and Zenodo Knowledge Junction\",\n                            \"fsk:description\": \"We show how to upload a fskx file from FSK-Web to Zenodo repository.\",\n                            \"fsk:designType\": \"Trial and Error\",\n                            \"fsk:assayMeasurementType\": \"It works or it doesn't\",\n                            \"fsk:assayTechnologyType\": \"Anatomic-pathologic Tests\",\n                            \"fsk:assayTechnologyPlatform\": \"Orbital Platform\",\n                            \"fsk:accreditationProcedureForTheAssayTechnology\": \"ISO/IEC17025\",\n                            \"fsk:protocolName\": \"Extraction Protocol Of FSK\",\n                            \"fsk:protocolDescription\": \"The protocol is definitly not made up\",\n                            \"fsk:protocolURI\": \"https://url-for-study-protocol-location.bfr.bund.de\",\n                            \"fsk:protocolVersion\": \"version 1.0\",\n                            \"fsk:protocolParametersName\": \"Parameter 1\",\n                            \"fsk:protocolComponentsName\": \"windows pc\",\n                            \"fsk:protocolComponentsType\": \"hardware\"\n                        },\n                        \"fsk:studySample\": [\n                            {\n                                \"fsk:sampleName\": \"Sample 1\",\n                                \"fsk:protocolOfSampleCollection\": \"SampleID_1\",\n                                \"fsk:samplingStrategy\": \"Convenient sampling\",\n                                \"fsk:typeOfSamplingProgram\": \"Diet study\",\n                                \"fsk:samplingMethod\": \"According to Reg 152/2009\",\n                                \"fsk:samplingPlan\": \"Random sampling\",\n                                \"fsk:samplingWeight\": \"description of the method employed to compute sampling weight (nonresponse-adjusted weight)\",\n                                \"fsk:samplingSize\": \"10000.0\",\n                                \"fsk:lotSizeUnit\": \"log10(CFU/25g)\",\n                                \"fsk:samplingPoint\": \"Catering\"\n                            },\n                            {\n                                \"fsk:sampleName\": \"Sample 2\",\n                                \"fsk:protocolOfSampleCollection\": \"SampleID_2\",\n                                \"fsk:samplingStrategy\": \"Selective sampling\",\n                                \"fsk:typeOfSamplingProgram\": \"Monitoring\",\n                                \"fsk:samplingMethod\": \"According to Reg 333/2007\",\n                                \"fsk:samplingPlan\": \"Stratified sampling\",\n                                \"fsk:samplingWeight\": \"description of the method employed to compute sampling weight (nonresponse-adjusted weight)\",\n                                \"fsk:samplingSize\": \"1000.0\",\n                                \"fsk:lotSizeUnit\": \"µL/kg\",\n                                \"fsk:samplingPoint\": \"Air transport\"\n                            },\n                            {\n                                \"fsk:sampleName\": \"Sample 3\",\n                                \"fsk:protocolOfSampleCollection\": \"SampleID_3\",\n                                \"fsk:samplingStrategy\": \"Census\",\n                                \"fsk:typeOfSamplingProgram\": \"Control and eradication programmes\",\n                                \"fsk:samplingMethod\": \"HACCP and owns check\",\n                                \"fsk:samplingPlan\": \"Multi-stage random sampling\",\n                                \"fsk:samplingWeight\": \"description of the method employed to compute sampling weight (nonresponse-adjusted weight)\",\n                                \"fsk:samplingSize\": \"2000.0\",\n                                \"fsk:lotSizeUnit\": \"µL/kg\",\n                                \"fsk:samplingPoint\": \"Household\"\n                            }\n                        ],\n                        \"fsk:laboratory\": [\n                            {\n                                \"fsk:accreditation\": [\n                                    \"Accredited\"\n                                ],\n                                \"fsk:name\": \"National High Magnetic Field Laboratory\",\n                                \"fsk:country\": \"United States\"\n                            },\n                            {\n                                \"fsk:accreditation\": [\n                                    \"Third party assessment\"\n                                ],\n                                \"fsk:name\": \"Everest Medical Laboratory\",\n                                \"fsk:country\": \"India\"\n                            }\n                        ],\n                        \"fsk:assay\": [\n                            {\n                                \"fsk:name\": \"Bradford protein assay\",\n                                \"fsk:description\": \"spectroscopic analytical procedure used to measure the concentration of protein in a solution. It is subjective, i.e., dependent on the amino acid composition of the measured protein\",\n                                \"fsk:detectionLimit\": \"30-300\",\n                                \"fsk:quantificationLimit\": \"5000 - 8000\",\n                                \"fsk:contaminationRange\": \"500-4000\"\n                            },\n                            {\n                                \"fsk:name\": \"ELISA\",\n                                \"fsk:description\": \"ELISA is a popular format of \\\"wet-lab\\\" type analytic biochemistry assay that uses a solid-phase enzyme immunoassay (EIA) to detect the presence of a substance, usually an antigen, in a liquid sample or wet sample.\",\n                                \"fsk:contaminationRange\": \"200-800\"\n                            },\n                            {\n                                \"fsk:name\": \"Plaque-Assay\",\n                                \"fsk:description\": \"standard method used to determine virus concentration in terms of infectious dose. Viral plaque assays determine the number of plaque forming units (pfu) in a virus sample, which is one measure of virus quantity.\",\n                                \"fsk:contaminationRange\": \"0,5 - 400\"\n                            }\n                        ]\n                    },\n                    \"fsk:modelMath\": {}\n                }\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/capture",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"capture"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
