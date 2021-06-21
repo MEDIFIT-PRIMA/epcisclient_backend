@@ -132,8 +132,18 @@ private suspend fun getModels(client: HttpClient, objectMapper: ObjectMapper): L
                         "fsk": "https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json"
                     },
                     "EQ_INNER_fsk:modelType": [
+                        "GenericModel",
+                        "DataModel",
+                        "PredictiveModel",
+                        "OtherModel",
                         "ExposureModel",
-                        "PredictiveModel"
+                        "ToxicologicalModel",
+                        "DoseResponseModel",
+                        "ProcessModel",
+                        "ConsumptionModel",
+                        "HealthModel",
+                        "RiskModel",
+                        "QraModel"
                     ]
                 }
             }
@@ -154,7 +164,6 @@ private suspend fun getModels(client: HttpClient, objectMapper: ObjectMapper): L
 }
 
 private suspend fun uploadModel(client: HttpClient, bodyParameter: JsonNode) {
-    println(bodyParameter.toPrettyString())
     val url = "https://demo-repository.openepcis.io"
     val response: HttpResponse = client.post("$url/capture") {
         headers {
