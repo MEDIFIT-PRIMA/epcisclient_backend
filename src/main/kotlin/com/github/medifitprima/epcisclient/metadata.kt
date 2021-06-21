@@ -1,3 +1,5 @@
+package com.github.medifitprima.epcisclient
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -13,8 +15,6 @@ fun main() {
     val metadataFile = object {}.javaClass.getResource("/metaData.json")
     metadataFile?.let {
         val metadata = mapper.readTree(metadataFile)
-//        objectMapper.writerWithDefaultPrettyPrinter().writeValue(System.out, metadata)
-
         val medifitMetadata = createMedifitMetadata(metadata, mapper)
         mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, medifitMetadata)
     }
@@ -248,17 +248,18 @@ private fun convertProduct(originalNode: JsonNode, mapper: ObjectMapper): JsonNo
     originalNode.copyStringChild("description", newNode, "fsk:description")
     originalNode.copyStringChild("unit", newNode, "fsk:unit")
 
-    if (originalNode.has("method")) {
-        newNode.set<ObjectNode>("fsk:method", originalNode["method"])
-    }
-
-    if (originalNode.has("packaging")) {
-        newNode.set<ObjectNode>("fsk:packaging", originalNode["packaging"])
-    }
-
-    if (originalNode.has("treatment")) {
-        newNode.set<ObjectNode>("fsk:treatment", originalNode["treatment"])
-    }
+    // FIXME: string arrays are not working with MEDIFIT API
+//    if (originalNode.has("method")) {
+//        newNode.set<ObjectNode>("fsk:method", originalNode["method"])
+//    }
+//
+//    if (originalNode.has("packaging")) {
+//        newNode.set<ObjectNode>("fsk:packaging", originalNode["packaging"])
+//    }
+//
+//    if (originalNode.has("treatment")) {
+//        newNode.set<ObjectNode>("fsk:treatment", originalNode["treatment"])
+//    }
 
     originalNode.copyStringChild("originCountry", newNode, "fsk:originCountry")
     originalNode.copyStringChild("originArea", newNode, "fsk:originArea")
@@ -293,7 +294,8 @@ private fun convertHazard(originalNode: JsonNode, mapper: ObjectMapper): JsonNod
 private fun convertLaboratory(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
 
     val newNode = mapper.createObjectNode()
-    newNode.set<ObjectNode>("fsk:accreditation", originalNode["accreditation"])
+    // FIXME: string arrays are not working with MEDIFIT API
+//    newNode.set<ObjectNode>("fsk:accreditation", originalNode["accreditation"])
     originalNode.copyStringChild("name", newNode, "fsk:name")
     originalNode.copyStringChild("country", newNode, "fsk:country")
 
@@ -321,7 +323,7 @@ private fun JsonNode.copyStringChild(originalKey: String, newNode: ObjectNode, n
 }
 
 private fun JsonNode.copyBooleanChild(originalKey: String, newNode: ObjectNode, newKey: String) {
-    this[originalKey]?.let { newNode.put(newKey, it.booleanValue()) }
+    this[originalKey]?.let { newNode.put(newKey, it.asText()) }
 }
 
 private fun JsonNode.copyDateChild(originalKey: String, newNode: ObjectNode, newKey: String) {
