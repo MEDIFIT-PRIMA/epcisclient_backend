@@ -1,0 +1,447 @@
+{
+  "modelType": "genericModel",
+  "generalInformation": {
+    "name": "Toy Model",
+    "source": "EVENTS (MEETING OR CONFERENCE)",
+    "identifier": "toymodel",
+    "author": [
+      {
+        "title": "Dr",
+        "familyName": "Doe",
+        "givenName": "Jane",
+        "email": "janedoe@gmail.com",
+        "telephone": "080 12345566",
+        "streetAddress": "Berliner Strasse 2",
+        "country": "Germany",
+        "region": "Berlin-Brandenburg",
+        "gender": "female",
+        "organization": "NYU"
+      }
+    ],
+    "creator": [
+      {
+        "title": "Dr.",
+        "familyName": "Smith",
+        "givenName": "John",
+        "email": "johnsmith@mail.com",
+        "telephone": "030 12345",
+        "streetAddress": "Nahmitzer Damm 40",
+        "country": "Germany",
+        "region": "Berlin-Brandenburg",
+        "organization": "BfR"
+      },
+      {
+        "title": "Mr.",
+        "familyName": "Clarke",
+        "givenName": "Jason",
+        "email": "clarke@mymail.com",
+        "telephone": "03301 1369158",
+        "streetAddress": "Mainstreet",
+        "country": "United States",
+        "region": "Brandenburg",
+        "organization": "BfR"
+      }
+    ],
+    "creationDate": [
+      2020,
+      10,
+      27
+    ],
+    "modificationDate": [
+      [
+        2021,
+        2,
+        12
+      ]
+    ],
+    "rights": "Creative Commons Attribution-NonCommercial 4.0",
+    "availability": "false",
+    "url": "",
+    "format": ".fskx",
+    "reference": [
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          1
+        ],
+        "doi": "10.5072/zenodo.168114",
+        "authorList": "Jack Bauer, Kiefer Sutherland",
+        "title": "Quantitative Risk Assessment in Food Establishments: Evaluating Strategies and Behavior on the Risk Associated with Fats in Foods",
+        "volume": "0",
+        "issue": "0",
+        "status": "Accepted",
+        "website": "https://www.nature.com",
+        "abstract": "This research looks at the work of Margaret C. Anderson, the editor of the Little Review.  The review published first works by Sherwood Anderson, James Joyce, Wyndham Lewis, and Ezra Pound.  This research draws upon mostly primary sources including memoirs, published letters, and a complete collection of the Little Review. Most prior research on Anderson focuses on her connection to the famous writers and personalities that she published and associated with.  This focus undermines her role as the dominant creative force behind one of the most influential little magazines published in the 20th Century. This case example shows how little magazine publishing is arguably a literary art"
+      },
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          6
+        ],
+        "doi": "10.1002/zenodo.211137",
+        "authorList": "James Bond, Timothy Dalton",
+        "title": "Norwalk virus: How infectious is it?",
+        "volume": "0",
+        "issue": "0",
+        "status": "Legal",
+        "website": "www.sciencemag.org",
+        "abstract": "This project involves discovering how the American Revolution was remembered during the nineteenth century.  The goal is to show that the American Revolution was memorialized by the actions of the United States government during the 1800s. This has been done by examining events such as the Supreme Court cases of John Marshall and the Nullification Crisis. Upon examination of these events, it becomes clear that John Marshall and John Calhoun (creator of the Doctrine of Nullification) attempted to use the American Revolution to bolster their claims by citing speeches from Founding Fathers. Through showing that the American Revolution lives on in memory, this research highlights the importance of the revolution in shaping the actions of the United States government."
+      },
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          7
+        ],
+        "doi": "10.1111/j.153xxx924.1999.tb01143.x",
+        "authorList": "Jack Ryan, Alec Baldwin, Harrison Ford",
+        "title": "Dose Response Models For Infectious Gastronomies",
+        "volume": "0",
+        "issue": "0",
+        "status": "Peer reviewed",
+        "website": "http://www.techbriefs.com",
+        "abstract": "The purpose of this research is to identify a subtype of autism called Developmental Verbal Dyspraxia (DVD).  DVD is a motor-speech problem, disabling oral-motor movements needed for speaking. The first phase of the project involves a screening interview where we identify DVD and Non-DVD kids.  We also use home videos to validate answers on the screening interview.  The final phase involves home visits where we use several assessments to confirm the child’s diagnosis and examine the connection between manual and oral motor challenges. By identifying DVD as a subtype of Autism, we will eliminate the assumption that all Autistics have the same characteristics. This will allow for more individual consideration of Autistic people and may direct future research on the genetic factors in autism."
+      }
+    ],
+    "language": "English",
+    "software": "FSK-Lab",
+    "languageWrittenIn": "R 3",
+    "modelCategory": {
+      "modelClass": "(Data)",
+      "modelSubClass": [],
+      "modelClassComment": "example data",
+      "basicProcess": [
+        ""
+      ]
+    },
+    "status": "Uncurated",
+    "objective": "This model can be used for tutorial purpose.",
+    "description": "This model was generated as an example."
+  },
+  "scope": {
+    "product": [
+      {
+        "name": "Oranges",
+        "description": "orange color",
+        "unit": "Meal",
+        "method": [
+          "Organic production"
+        ],
+        "packaging": [
+          "Not packed (loose; open)"
+        ],
+        "treatment": [
+          "Juicing"
+        ],
+        "originCountry": "Italy",
+        "originArea": "Bologna",
+        "fisheriesArea": "Azores Grounds",
+        "productionDate": [
+          2011,
+          10,
+          29
+        ],
+        "expiryDate": [
+          2011,
+          11,
+          30
+        ]
+      }
+    ],
+    "hazard": [
+      {
+        "type": "Pesticide residues",
+        "name": "Thiabendazole",
+        "description": "powder",
+        "unit": "mg/kg",
+        "adverseEffect": "washing",
+        "sourceOfContamination": "spray",
+        "maximumResidueLimit": "0.01 mg/kg",
+        "noObservedAdverseAffectLevel": "10 mg",
+        "lowestObservedAdverseAffectLevel": "40 mg",
+        "acceptableOperatorsExposureLevel": "50 mg",
+        "acuteReferenceDose": "80 mg",
+        "acceptableDailyIntake": "20 mg"
+      }
+    ],
+    "populationGroup": [
+      {
+        "name": "human consumer, no age specification",
+        "targetPopulation": "seniors",
+        "populationDescription": [
+          "80% are considered susceptible to infection"
+        ],
+        "populationGender": "50% male ",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "love cake"
+        ],
+        "region": [
+          "España"
+        ],
+        "country": [
+          "Spain"
+        ],
+        "populationRiskFactor": [
+          "low physical activity"
+        ],
+        "season": [
+          "spring"
+        ]
+      },
+      {
+        "name": "human consumer, adult",
+        "targetPopulation": "soldiers",
+        "populationDescription": [
+          "highly vaccinated"
+        ],
+        "populationGender": "90% male",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "20% muslim"
+        ],
+        "region": [
+          "Mittelburgenland"
+        ],
+        "country": [
+          "Austria"
+        ],
+        "populationRiskFactor": [
+          "bullet to the head"
+        ],
+        "season": [
+          "summer"
+        ]
+      },
+      {
+        "name": "human consumer, men",
+        "targetPopulation": "millenials",
+        "populationDescription": [
+          "thy get sick all the time"
+        ],
+        "populationGender": "100% male",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "30% vegetarians"
+        ],
+        "region": [
+          "Nottingham"
+        ],
+        "country": [
+          "United Kingdom"
+        ],
+        "populationRiskFactor": [
+          "vaping"
+        ],
+        "season": [
+          "winter"
+        ]
+      }
+    ],
+    "generalComment": "workshop example with fictitious data",
+    "temporalInformation": "1990 - 2000",
+    "spatialInformation": []
+  },
+  "dataBackground": {
+    "study": {
+      "identifier": "workshop_example_05132019",
+      "title": "FSK-Lab and Zenodo Knowledge Junction",
+      "description": "We show how to upload a fskx file from FSK-Web to Zenodo repository.",
+      "designType": "Trial and Error",
+      "assayMeasurementType": "It works or it doesn't",
+      "assayTechnologyType": "Anatomic-pathologic Tests",
+      "assayTechnologyPlatform": "Orbital Platform",
+      "accreditationProcedureForTheAssayTechnology": "ISO/IEC17025",
+      "protocolName": "Extraction Protocol Of FSK",
+      "protocolDescription": "The protocol is definitly not made up",
+      "protocolURI": "https://url-for-study-protocol-location.bfr.bund.de",
+      "protocolVersion": "version 1.0",
+      "protocolParametersName": "Parameter 1",
+      "protocolComponentsName": "windows pc",
+      "protocolComponentsType": "hardware"
+    },
+    "studySample": [
+      {
+        "sampleName": "Sample 1",
+        "protocolOfSampleCollection": "SampleID_1",
+        "samplingStrategy": "Convenient sampling",
+        "typeOfSamplingProgram": "Diet study",
+        "samplingMethod": "According to Reg 152/2009",
+        "samplingPlan": "Random sampling",
+        "samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+        "samplingSize": "10000.0",
+        "lotSizeUnit": "log10(CFU/25g)",
+        "samplingPoint": "Catering"
+      },
+      {
+        "sampleName": "Sample 2",
+        "protocolOfSampleCollection": "SampleID_2",
+        "samplingStrategy": "Selective sampling",
+        "typeOfSamplingProgram": "Monitoring",
+        "samplingMethod": "According to Reg 333/2007",
+        "samplingPlan": "Stratified sampling",
+        "samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+        "samplingSize": "1000.0",
+        "lotSizeUnit": "µL/kg",
+        "samplingPoint": "Air transport"
+      },
+      {
+        "sampleName": "Sample 3",
+        "protocolOfSampleCollection": "SampleID_3",
+        "samplingStrategy": "Census",
+        "typeOfSamplingProgram": "Control and eradication programmes",
+        "samplingMethod": "HACCP and owns check",
+        "samplingPlan": "Multi-stage random sampling",
+        "samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+        "samplingSize": "2000.0",
+        "lotSizeUnit": "µL/kg",
+        "samplingPoint": "Household"
+      }
+    ],
+    "dietaryAssessmentMethod": [
+      {
+        "collectionTool": "food diaries",
+        "numberOfNonConsecutiveOneDay": "5",
+        "softwareTool": "FoodWorks",
+        "numberOfFoodItems": [
+          null
+        ],
+        "recordTypes": [
+          "Mean of consumption"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      },
+      {
+        "collectionTool": "Other observational studies",
+        "numberOfNonConsecutiveOneDay": "10",
+        "softwareTool": "Nutritics",
+        "numberOfFoodItems": [
+          null
+        ],
+        "recordTypes": [
+          "Quantified and described as eaten"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      },
+      {
+        "collectionTool": "portion size measurement aids",
+        "numberOfNonConsecutiveOneDay": "20",
+        "softwareTool": "Purefood",
+        "numberOfFoodItems": [
+          null
+        ],
+        "recordTypes": [
+          "Recipes for self-made"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      }
+    ],
+    "laboratory": [
+      {
+        "accreditation": [
+          "Accredited"
+        ],
+        "name": "National High Magnetic Field Laboratory",
+        "country": "United States"
+      },
+      {
+        "accreditation": [
+          "Third party assessment"
+        ],
+        "name": "Everest Medical Laboratory",
+        "country": "India"
+      }
+    ],
+    "assay": [
+      {
+        "name": "Bradford protein assay",
+        "description": "spectroscopic analytical procedure used to measure the concentration of protein in a solution. It is subjective, i.e., dependent on the amino acid composition of the measured protein",
+        "detectionLimit": "30-300",
+        "quantificationLimit": "5000 - 8000",
+        "contaminationRange": "500-4000"
+      },
+      {
+        "name": "ELISA",
+        "description": "ELISA is a popular format of \"wet-lab\" type analytic biochemistry assay that uses a solid-phase enzyme immunoassay (EIA) to detect the presence of a substance, usually an antigen, in a liquid sample or wet sample.",
+        "contaminationRange": "200-800"
+      },
+      {
+        "name": "Plaque-Assay",
+        "description": "standard method used to determine virus concentration in terms of infectious dose. Viral plaque assays determine the number of plaque forming units (pfu) in a virus sample, which is one measure of virus quantity.",
+        "contaminationRange": "0,5 - 400"
+      }
+    ]
+  },
+  "modelMath": {
+    "parameter": [
+      {
+        "id": "TimeMax",
+        "classification": "INPUT",
+        "name": "TimeMax",
+        "unit": "h",
+        "dataType": "DOUBLE",
+        "value": "60.0"
+      },
+      {
+        "id": "a",
+        "classification": "INPUT",
+        "name": "a",
+        "unit": "mg",
+        "dataType": "DOUBLE",
+        "value": "5.0"
+      },
+      {
+        "id": "b",
+        "classification": "INPUT",
+        "name": "b",
+        "unit": "kg",
+        "dataType": "DOUBLE",
+        "value": "0.2"
+      },
+      {
+        "id": "Value",
+        "classification": "OUTPUT",
+        "name": "Value",
+        "unit": "mg/kg",
+        "dataType": "MATRIXOFSTRINGS"
+      }
+    ],
+    "qualityMeasures": [
+      {
+        "sse": 0,
+        "mse": 0.2,
+        "rmse": 0.3,
+        "aic": 0,
+        "bic": 1
+      }
+    ],
+    "modelEquation": [
+      {
+        "name": "baseEquation",
+        "modelEquationClass": "",
+        "modelEquation": "Valu=-a*Time^b",
+        "modelHypothesis": []
+      }
+    ],
+    "fittingProcedure": "stepwise fitting procedure",
+    "exposure": [],
+    "event": []
+  }
+}
