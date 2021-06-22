@@ -46,5 +46,5 @@ compileTestKotlin {
 }
 
 application {
-    mainClassName = 'MainKt'
+    mainClassName = 'com.github.medifitprima.epcisclient.ApplicationKt'
 }
