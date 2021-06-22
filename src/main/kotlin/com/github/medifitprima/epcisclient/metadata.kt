@@ -8,18 +8,6 @@ import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.time.LocalDate
 
-fun main() {
-
-    val mapper = ObjectMapper().registerModule(KotlinModule()).registerModule(ThreeTenModule())
-
-    val metadataFile = object {}.javaClass.getResource("/metaData.json")
-    metadataFile?.let {
-        val metadata = mapper.readTree(metadataFile)
-        val medifitMetadata = createMedifitMetadata(metadata, mapper)
-        mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, medifitMetadata)
-    }
-}
-
 fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNode {
 
     val objectNode = mapper.createObjectNode()
@@ -46,6 +34,12 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
                 .set<ObjectNode>("fsk:scope", convertPredictiveModelScope(fskmlMetadata["scope"], mapper))
                 .set<ObjectNode>("fsk:dataBackground", convertPredictiveModelDataBackground(fskmlMetadata["dataBackground"], mapper))
                 .set<ObjectNode>("fsk:modelMath", convertPredictiveModelModelMath(fskmlMetadata["modelMath"], mapper))
+        }
+        "otherModel" -> {
+            objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", convertGenericModelScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", convertGenericModelModelMath(fskmlMetadata["modelMath"], mapper))
         }
     }
 

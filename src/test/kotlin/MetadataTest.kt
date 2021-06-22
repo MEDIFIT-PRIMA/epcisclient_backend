@@ -2,6 +2,8 @@ package com.github.medifitprima.epcisclient
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertTrue
@@ -9,12 +11,19 @@ import kotlin.test.assertTrue
 class MetadataTest {
 
     companion object {
-        val mapper = ObjectMapper()
+        val mapper: ObjectMapper = ObjectMapper().registerModule(KotlinModule()).registerModule(ThreeTenModule())
     }
 
     @Test
     fun testConvertGenericModel() {
         val tree = mapper.readTree(File("src/test/resources/genericModel.json"))
+        val medifitMetadata = createMedifitMetadata(tree, mapper)
+        medifitMetadata.checkMetadata()
+    }
+
+    @Test
+    fun testConvertPredictiveModel() {
+        val tree = mapper.readTree(File("src/test/resources/predictiveModel.json"))
         val medifitMetadata = createMedifitMetadata(tree, mapper)
         medifitMetadata.checkMetadata()
     }
@@ -27,13 +36,12 @@ class MetadataTest {
     }
 
     @Test
-    fun testConvertPredictiveModel() {
-        val tree = mapper.readTree(File("src/test/resources/predictiveModel.json"))
+    fun testConvertOtherModel() {
+        val tree = mapper.readTree(File("src/test/resources/otherModel.json"))
         val medifitMetadata = createMedifitMetadata(tree, mapper)
         medifitMetadata.checkMetadata()
     }
 
-    // TODO: testConvertOtherModel
     // TODO: testConvertExposureModel
     // TODO: testConvertToxicologicalModel
     // TODO: testConvertDoseResponseModel
