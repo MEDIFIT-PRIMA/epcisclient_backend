@@ -41,6 +41,12 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
                 .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
                 .set<ObjectNode>("fsk:modelMath", convertDataModelModelMath(fskmlMetadata["modelMath"], mapper))
         }
+        "predictiveModel" -> {
+            objectNode.set<ObjectNode>("fsk:generalInformation", convertPredictiveModelGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", convertPredictiveModelScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", convertPredictiveModelDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", convertPredictiveModelModelMath(fskmlMetadata["modelMath"], mapper))
+        }
     }
 
     return objectNode
@@ -393,7 +399,6 @@ private fun convertAssay(originalNode: JsonNode, mapper: ObjectMapper): JsonNode
 private fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
 
     val newNode = mapper.createObjectNode()
-
     originalNode.copyStringChild("id", newNode, "fsk:id")
     originalNode.copyStringChild("classification", newNode, "fsk:classification")
     originalNode.copyStringChild("name", newNode, "fsk:name")
@@ -414,11 +419,171 @@ private fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): Json
     return newNode
 }
 
+private fun convertPredictiveModelGeneralInformation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+    val newNode = mapper.createObjectNode()
+
+    originalNode.copyStringChild("name", newNode, "fsk:name")
+    originalNode.copyStringChild("source", newNode, "fsk:source")
+    originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
+
+    if (originalNode.has("author")) {
+        val newAuthors = mapper.createArrayNode()
+        originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
+        newNode.set<ObjectNode>("fsk:author", newAuthors)
+    }
+
+    if (originalNode.has("creator")) {
+        val newCreators = mapper.createArrayNode()
+        originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
+        newNode.set<ObjectNode>("fsk:creator", newCreators)
+    }
+
+    // TODO: creationDate (LocalDate)
+    // TODO: modificationDate (LocalDate[])
+
+    originalNode.copyStringChild("rights", newNode, "fsk:rights")
+    originalNode.copyStringChild("availability", newNode, "fsk:availability")
+    originalNode.copyStringChild("url", newNode, "fsk:url")
+    originalNode.copyStringChild("format", newNode, "fsk:format")
+
+    if (originalNode.has("reference")) {
+        val newReferences = mapper.createArrayNode()
+        originalNode["reference"].map { convertContact(it, mapper) }.forEach(newReferences::add)
+        newNode.set<ObjectNode>("fsk:reference", newReferences)
+    }
+
+    originalNode.copyStringChild("language", newNode, "fsk:language")
+    originalNode.copyStringChild("software", newNode, "fsk:software")
+    originalNode.copyStringChild("languageWrittenIn", newNode, "fsk:languageWrittenIn")
+
+    // TODO: modelCategory
+
+    originalNode.copyStringChild("status", newNode, "fsk:status")
+    originalNode.copyStringChild("objective", newNode, "fsk:objective")
+    originalNode.copyStringChild("description", newNode, "fsk:description")
+
+    return newNode
+}
+
+private fun convertPredictiveModelScope(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+    val newNode = mapper.createObjectNode()
+
+    if (originalNode.has("product")) {
+        val newProducts = mapper.createArrayNode()
+        originalNode["product"].forEach { newProducts.add(convertProduct(it, mapper)) }
+        newNode.set<ObjectNode>("fsk:product", newProducts)
+    }
+
+    if (originalNode.has("hazard")) {
+        val newHazards = mapper.createArrayNode()
+        originalNode["hazard"].forEach { newHazards.add(convertHazard(it, mapper)) }
+        newNode.set<ObjectNode>("fsk:hazard", newHazards)
+    }
+
+    originalNode.copyStringChild("generalComment", newNode, "fsk:generalComment")
+    originalNode.copyStringChild("temporalInformation", newNode, "fsk:temporalInformation")
+
+    // TODO: spatial information
+
+    return newNode
+}
+
+private fun convertPredictiveModelDataBackground(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+
+    newNode.set<ObjectNode>("fsk:study", convertStudy(originalNode["study"], mapper))
+
+    if (originalNode.has("studySample")) {
+        val newSamples = mapper.createArrayNode()
+        originalNode["studySample"].map { convertStudySample(it, mapper) }.forEach(newSamples::add)
+        newNode.set<ObjectNode>("fsk:studySample", newSamples)
+    }
+
+    if (originalNode.has("laboratory")) {
+        val newLabs = mapper.createArrayNode()
+        originalNode["laboratory"].map { convertLaboratory(it, mapper) }.forEach(newLabs::add)
+        newNode.set<ObjectNode>("fsk:laboratory", newLabs)
+    }
+
+    if (originalNode.has("assay")) {
+        val newAssays = mapper.createArrayNode()
+        originalNode["assay"].map { convertAssay(it, mapper) }.forEach(newAssays::add)
+        newNode.set<ObjectNode>("fsk:assay", newAssays)
+    }
+
+    return newNode
+}
+
+private fun convertPredictiveModelModelMath(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+
+    if (originalNode.has("parameter")) {
+        val newParameters = mapper.createArrayNode()
+        originalNode["parameter"].map { convertParameter(it, mapper) }.forEach(newParameters::add)
+        newNode.set<ObjectNode>("fsk:parameter", newParameters)
+    }
+
+    if (originalNode.has("qualityMeasures")) {
+        val newMeasures = mapper.createArrayNode()
+        originalNode["qualityMeasures"].map { convertQualityMeasures(it, mapper) }.forEach(newMeasures::add)
+        newNode.set<ObjectNode>("fsk:qualityMeasures", newMeasures)
+    }
+
+    if (originalNode.has("modelEquation")) {
+        val newEquations = newNode.putArray("modelEquation")
+        originalNode["qualityMeasures"].map { convertModelEquation(it, mapper) }.forEach(newEquations::add)
+    }
+
+    originalNode.copyStringChild("fittingProcedure", newNode, "fsk:fittingProcedure")
+
+    if (originalNode.has("event")) {
+        newNode.set<ObjectNode>("event", originalNode["event"])
+    }
+
+    return newNode
+}
+
+private fun convertQualityMeasures(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+    originalNode.copyNumericalValue("sse", newNode, "fsk:sse")
+    originalNode.copyNumericalValue("mse", newNode, "fsk:mse")
+    originalNode.copyNumericalValue("rmse", newNode, "fsk:rmse")
+    originalNode.copyNumericalValue("rsquared", newNode, "fsk:rsquared")
+    originalNode.copyNumericalValue("aic", newNode, "fsk:aic")
+    originalNode.copyNumericalValue("bic", newNode, "fsk:bic")
+    originalNode.copyStringChild("sensitivityAnalysis", newNode, "fsk:sensitivityAnalysis")
+
+    return newNode
+}
+
+private fun convertModelEquation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+
+    originalNode.copyStringChild("name", newNode, "fsk:name")
+    originalNode.copyStringChild("modelEquationClass", newNode, "fsk:modelEquationClass")
+    // TODO: reference
+    originalNode.copyStringChild("modelEquation", newNode, "fsk:modelEquation")
+
+    if (originalNode.has("modelHypothesis")) {
+        newNode.set<ObjectNode>("fsk:modelHypothesis", originalNode["modelHypothesis"])
+    }
+
+    return newNode
+}
+
 private fun JsonNode.copyStringChild(originalKey: String, newNode: ObjectNode, newKey: String) {
     this[originalKey]?.let { newNode.put(newKey, it.textValue()) }
 }
 
 private fun JsonNode.copyBooleanChild(originalKey: String, newNode: ObjectNode, newKey: String) {
+    this[originalKey]?.let { newNode.put(newKey, it.asText()) }
+}
+
+private fun JsonNode.copyNumericalValue(originalKey: String, newNode: ObjectNode, newKey: String) {
     this[originalKey]?.let { newNode.put(newKey, it.asText()) }
 }
 
