@@ -1,0 +1,637 @@
+{
+  "modelType": "dataModel",
+  "generalInformation": {
+    "name": "Data Toymodel",
+    "source": "UNPUBLISHED STUDIES (EXPERIMENTS-OBSERVATIONS)",
+    "identifier": "Toy_Model_data_01",
+    "author": [
+      {
+        "title": "Prof",
+        "familyName": "Mosley",
+        "givenName": "Steve",
+        "email": "mosley@nyu.org",
+        "telephone": "080 12345566",
+        "streetAddress": "Berliner Strasse 2",
+        "country": "Saint Vincent and the Grenadines",
+        "zipCode": "12345",
+        "region": "Greater New Yorker Area",
+        "organization": "NYU"
+      }
+    ],
+    "creator": [
+      {
+        "title": "Dr.",
+        "familyName": "Romanov",
+        "givenName": "Natalia",
+        "email": "black_widow@marvel.com",
+        "telephone": "030 12345",
+        "streetAddress": "Nahmitzer Damm 40",
+        "country": "Russian Federation",
+        "zipCode": "14123",
+        "region": "Berlin-Brandenburg",
+        "organization": "SHIELD"
+      },
+      {
+        "title": "Mr.",
+        "familyName": "Parker",
+        "givenName": "Peter",
+        "email": "peter.parker@parker.com",
+        "telephone": "03301 1369158",
+        "streetAddress": "Am Kleinen Wannsee 16",
+        "country": "United States",
+        "zipCode": "16515",
+        "region": "Brandenburg",
+        "organization": "Parker Industries"
+      }
+    ],
+    "creationDate": [
+      2019,
+      7,
+      11
+    ],
+    "rights": "Academic Free License 3.0",
+    "availability": "Open access",
+    "url": "https://url-for-resource-location.bfr.bund.de",
+    "format": ".fskx",
+    "reference": [
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          2
+        ],
+        "doi": "10.1111/risa.12758",
+        "authorList": "Jack Bauer, Kiefer Sutherland",
+        "title": "Quantitative Risk Assessment of Norovirus Transmission in Food Establishments: Evaluating the Impact of Intervention Strategies and Food Employee Behavior on the Risk Associated with Norovirus in Foods",
+        "status": "Accepted",
+        "website": "https://www.nature.com",
+        "comment": "publisher demanded edits",
+        "abstract": "This research looks at the work of Margaret C. Anderson, the editor of the Little Review.  The review published first works by Sherwood Anderson, James Joyce, Wyndham Lewis, and Ezra Pound.  This research draws upon mostly primary sources including memoirs, published letters, and a complete collection of the Little Review. Most prior research on Anderson focuses on her connection to the famous writers and personalities that she published and associated with.  This focus undermines her role as the dominant creative force behind one of the most influential little magazines published in the 20th Century. This case example shows how little magazine publishing is arguably a literary art"
+      },
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          7
+        ],
+        "doi": "10.1002/jmv.21237",
+        "authorList": "James Bond, Timothy Dalton",
+        "title": "Norwalk virus: How infectious is it?",
+        "status": "Legal",
+        "website": "www.sciencemag.org",
+        "comment": "publisher hates lettuce",
+        "abstract": "This project involves discovering how the American Revolution was remembered during the nineteenth century.  The goal is to show that the American Revolution was memorialized by the actions of the United States government during the 1800s. This has been done by examining events such as the Supreme Court cases of John Marshall and the Nullification Crisis. Upon examination of these events, it becomes clear that John Marshall and John Calhoun (creator of the Doctrine of Nullification) attempted to use the American Revolution to bolster their claims by citing speeches from Founding Fathers. Through showing that the American Revolution lives on in memory, this research highlights the importance of the revolution in shaping the actions of the United States government."
+      },
+      {
+        "isReferenceDescription": true,
+        "date": [
+          1905,
+          7,
+          8
+        ],
+        "doi": "10.1111/j.1539-6924.1999.tb01143.x",
+        "authorList": "Jack Ryan, Alec Baldwin, Harrison Ford",
+        "title": "Dose Response Models For Infectious Gastroenteritis",
+        "status": "Peer reviewed",
+        "website": "http://www.techbriefs.com",
+        "comment": "nerds",
+        "abstract": "The purpose of this research is to identify a subtype of autism called Developmental Verbal Dyspraxia (DVD).  DVD is a motor-speech problem, disabling oral-motor movements needed for speaking. The first phase of the project involves a screening interview where we identify DVD and Non-DVD kids.  We also use home videos to validate answers on the screening interview.  The final phase involves home visits where we use several assessments to confirm the child’s diagnosis and examine the connection between manual and oral motor challenges. By identifying DVD as a subtype of Autism, we will eliminate the assumption that all Autistics have the same characteristics. This will allow for more individual consideration of Autistic people and may direct future research on the genetic factors in autism."
+      },
+      {
+        "isReferenceDescription": false,
+        "date": [
+          1905,
+          7,
+          10
+        ],
+        "doi": "10.5072/zenodo.219114",
+        "authorList": "Jason Bourne, Mat Damon, ",
+        "title": "Bourne Identity",
+        "status": "Published",
+        "website": "https://www.springer.com/journal/00419/",
+        "comment": "doesn't exist anymore",
+        "abstract": "The study is to show how even a “sport” video game can incorporate many types of learning, to call attention to what might be overlooked as significant forms of learning, and to understand and take advantage of the opportunities video games afford as more deliberate learning environments. The aspects explored are the skills and techniques required to be successful in the game, the environment that skaters skate in, the personal vs. group identity that is shown through the general appearance of the skater, and the values and icons that the game teaches players. We are finding that sport video games support learning; we hope to find how one learns about oneself as a learner from playing."
+      }
+    ],
+    "language": "German",
+    "objective": "FSK-Lab",
+    "description": "R 3"
+  },
+  "scope": {
+    "product": [
+      {
+        "name": "Lettuce",
+        "description": "fresh german lettuce",
+        "unit": "g",
+        "method": [
+          "Organic production"
+        ],
+        "packaging": [
+          "Packed"
+        ],
+        "treatment": [
+          "Freezing"
+        ],
+        "originCountry": "Germany",
+        "originArea": "Aachen, Kreisfreie Stadt",
+        "fisheriesArea": "Arctic Sea",
+        "productionDate": [
+          2011,
+          10,
+          30
+        ],
+        "expiryDate": [
+          2011,
+          12,
+          1
+        ]
+      },
+      {
+        "name": "Tomatoes",
+        "description": "not so fresh",
+        "unit": "g",
+        "method": [
+          "Genetically modified"
+        ],
+        "packaging": [
+          "Cardboard - paperboard"
+        ],
+        "treatment": [
+          "Heating"
+        ],
+        "originCountry": "Spain",
+        "originArea": "Lazio",
+        "fisheriesArea": "Mediterranean and Black Sea",
+        "productionDate": [
+          2012,
+          12,
+          3
+        ],
+        "expiryDate": [
+          2013,
+          2,
+          1
+        ]
+      },
+      {
+        "name": "Meat, preparations of meat, offals, blood, animal fats; fresh, chilled or frozen, salted, in brine, dried or smoked or processed as flours or meals; other processed products such as sausages and food preparations based on these",
+        "description": "pretty much any processed meat product imaginable",
+        "unit": "g",
+        "method": [
+          "Farmed Domestic or cultivated"
+        ],
+        "packaging": [
+          "Vacuum package"
+        ],
+        "treatment": [
+          "Fermentation"
+        ],
+        "originCountry": "United Kingdom",
+        "originArea": "East Anglia",
+        "fisheriesArea": "Atlantic Ocean",
+        "productionDate": [
+          2013,
+          5,
+          15
+        ],
+        "expiryDate": [
+          2014,
+          5,
+          1
+        ]
+      }
+    ],
+    "hazard": [
+      {
+        "type": "Organic contaminants",
+        "name": "norovirus (Norwalk-like virus)",
+        "description": "novovirus is described as nast and hard to get rid of",
+        "unit": "CFU",
+        "adverseEffect": "morbitity",
+        "sourceOfContamination": "sewage",
+        "maximumResidueLimit": "0.01 mg/kg",
+        "noObservedAdverseAffectLevel": "10 mg",
+        "lowestObservedAdverseAffectLevel": "40 mg",
+        "acceptableOperatorsExposureLevel": "50 mg",
+        "acuteReferenceDose": "80 mg",
+        "acceptableDailyIntake": "20 mg"
+      },
+      {
+        "type": "Microorganisms",
+        "name": "Salmonella Daarle",
+        "description": "we dont know how that got into the tomatoes but it is there",
+        "unit": "Fill",
+        "adverseEffect": "mortality",
+        "sourceOfContamination": "air",
+        "maximumResidueLimit": "0.11 mg/kg",
+        "noObservedAdverseAffectLevel": "5 mg",
+        "lowestObservedAdverseAffectLevel": "50 mg",
+        "acceptableOperatorsExposureLevel": "80 mg",
+        "acuteReferenceDose": "100 mg",
+        "acceptableDailyIntake": "30 mg"
+      },
+      {
+        "type": "Food additives",
+        "name": "Monoammonium glutamate",
+        "description": "tastes great but bad for your beach bod",
+        "unit": "fg/mL",
+        "adverseEffect": "obesity",
+        "sourceOfContamination": "rodents",
+        "benchmarkDose": "123.12",
+        "maximumResidueLimit": "0.25 - 0.4 mg/kg",
+        "noObservedAdverseAffectLevel": "1 mg",
+        "lowestObservedAdverseAffectLevel": "100 mg",
+        "acceptableOperatorsExposureLevel": "120 mg",
+        "acuteReferenceDose": "140 mg",
+        "acceptableDailyIntake": "90 mg"
+      }
+    ],
+    "populationGroup": [
+      {
+        "name": "human consumer, no age specification",
+        "targetPopulation": "seniors",
+        "populationDescription": [
+          "80% are considered susceptible to infection"
+        ],
+        "populationAge": [
+          "60 - 99"
+        ],
+        "populationGender": "50% male ",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "love cake"
+        ],
+        "patternConsumption": [
+          "<2000 kcal / day"
+        ],
+        "region": [
+          "España"
+        ],
+        "country": [
+          "Spain"
+        ],
+        "populationRiskFactor": [
+          "low physical activity"
+        ],
+        "season": [
+          "spring"
+        ]
+      },
+      {
+        "name": "human consumer, adult",
+        "targetPopulation": "soldiers",
+        "populationDescription": [
+          "highly vaccinated"
+        ],
+        "populationAge": [
+          "18 - 49"
+        ],
+        "populationGender": "90% male",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "20% muslim"
+        ],
+        "patternConsumption": [
+          "3000+ kcal / day"
+        ],
+        "region": [
+          "Mittelburgenland"
+        ],
+        "country": [
+          "Austria"
+        ],
+        "populationRiskFactor": [
+          "bullet to the head"
+        ],
+        "season": [
+          "summer"
+        ]
+      },
+      {
+        "name": "human consumer, men",
+        "targetPopulation": "millenials",
+        "populationDescription": [
+          "thy get sick all the time"
+        ],
+        "populationAge": [
+          "20 - 36"
+        ],
+        "populationGender": "100% male",
+        "bmi": [
+          "18.5 – 24.9"
+        ],
+        "specialDietGroups": [
+          "30% vegetarians"
+        ],
+        "patternConsumption": [
+          "2000 kcal / day"
+        ],
+        "region": [
+          "Nottingham"
+        ],
+        "country": [
+          "United Kingdom"
+        ],
+        "populationRiskFactor": [
+          "vaping"
+        ],
+        "season": [
+          "winter"
+        ]
+      }
+    ],
+    "generalComment": "(General Comment) The Scope of this model is universal",
+    "temporalInformation": "s1990 - 2000"
+  },
+  "dataBackground": {
+    "study": {
+      "identifier": "Study_Generic_Sheet_1",
+      "title": "Assessment of integrity of metadata in FKS Lab and associated services",
+      "description": "This Study will show, wether the FSK Lab will correctly read and run a generic and fully annotated model",
+      "designType": "Trial and Error",
+      "assayMeasurementType": "It works or it doesn't",
+      "assayTechnologyType": "QPCR",
+      "assayTechnologyPlatform": "Orbital Platform",
+      "accreditationProcedureForTheAssayTechnology": "Internally validated",
+      "protocolName": "Extraction Protocol Of FSK",
+      "protocolType": "Extraction Protocol",
+      "protocolDescription": "The protocol is definitly not made up",
+      "protocolURI": "https://url-for-study-protocol-location.bfr.bund.de",
+      "protocolVersion": "version 1.0",
+      "protocolParametersName": "Parameter 1",
+      "protocolComponentsName": "windows pc",
+      "protocolComponentsType": "hardware"
+    },
+    "dietaryAssessmentMethod": [
+      {
+        "collectionTool": "food diaries",
+        "numberOfNonConsecutiveOneDay": "5.0",
+        "softwareTool": "FoodWorks",
+        "numberOfFoodItems": [],
+        "recordTypes": [
+          "Mean of consumption"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      },
+      {
+        "collectionTool": "Other observational studies",
+        "numberOfNonConsecutiveOneDay": "10.0",
+        "softwareTool": "Nutritics",
+        "numberOfFoodItems": [],
+        "recordTypes": [
+          "Quantified and described as eaten"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      },
+      {
+        "collectionTool": "portion size measurement aids",
+        "numberOfNonConsecutiveOneDay": "20.0",
+        "softwareTool": "Purefood",
+        "numberOfFoodItems": [],
+        "recordTypes": [
+          "Recipes for self-made"
+        ],
+        "foodDescriptors": [
+          "(Beet) Sugar"
+        ]
+      }
+    ],
+    "laboratory": [
+      {
+        "accreditation": [
+          "Accredited"
+        ],
+        "name": "National High Magnetic Field Laboratory",
+        "country": "United States"
+      },
+      {
+        "accreditation": [
+          "Third party assessment"
+        ],
+        "name": "Everest Medical Laboratory",
+        "country": "India"
+      },
+      {
+        "accreditation": [
+          "None"
+        ],
+        "name": "RimeTimeLab",
+        "country": "Germany"
+      }
+    ],
+    "assay": [
+      {
+        "name": "Bradford protein assay",
+        "description": "spectroscopic analytical procedure used to measure the concentration of protein in a solution. It is subjective, i.e., dependent on the amino acid composition of the measured protein",
+        "detectionLimit": "30-300",
+        "quantificationLimit": "5000 - 8000",
+        "contaminationRange": "500-4000"
+      },
+      {
+        "name": "ELISA",
+        "description": "ELISA is a popular format of \"wet-lab\" type analytic biochemistry assay that uses a solid-phase enzyme immunoassay (EIA) to detect the presence of a substance, usually an antigen, in a liquid sample or wet sample.",
+        "contaminationRange": "200-800"
+      },
+      {
+        "name": "Plaque-Assay",
+        "description": "standard method used to determine virus concentration in terms of infectious dose. Viral plaque assays determine the number of plaque forming units (pfu) in a virus sample, which is one measure of virus quantity.",
+        "contaminationRange": "0,5 - 400"
+      }
+    ]
+  },
+  "modelMath": {
+    "parameter": [
+      {
+        "id": "Dose_matrix",
+        "classification": "INPUT",
+        "name": "Dose_matrix",
+        "description": "matrix with GEC NoV for each serving (rows=servings; columns = number of different employee-teams that prepare food)",
+        "unit": "kGy/h",
+        "unitCategory": "Energy Content Rate",
+        "dataType": "FILE",
+        "source": "Article",
+        "subject": "Animal",
+        "distribution": "Bernoulli 1",
+        "value": "as.matrix(read.table(file =\"Dose_matrix.csv\",sep=\",\", header = TRUE, row.names=1))",
+        "variabilitySubject": "days",
+        "minValue": "1.0",
+        "maxValue": "10000.0",
+        "error": "0.5"
+      },
+      {
+        "id": "nInf",
+        "classification": "OUTPUT",
+        "name": "nInf",
+        "description": "number of infected individuals, mean over stores (2000 servings per store)",
+        "unit": "PFU/25g",
+        "unitCategory": "Number Content (count/mass)",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Batch of animals",
+        "distribution": "Log-Logistic 2",
+        "variabilitySubject": "hours",
+        "minValue": "0.1",
+        "maxValue": "20000.0",
+        "error": "0.4"
+      },
+      {
+        "id": "nIll",
+        "classification": "OUTPUT",
+        "name": "nIll",
+        "description": "number of ill individuals, mean over stores (2000 servings per store)",
+        "unit": "mg",
+        "unitCategory": "Mass",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Batch of products",
+        "distribution": "Half Cauchy 1",
+        "variabilitySubject": "size",
+        "minValue": "0.3",
+        "maxValue": "30000.0",
+        "error": "0.3"
+      },
+      {
+        "id": "meanPos",
+        "classification": "OUTPUT",
+        "name": "meanPos",
+        "description": "mean number of NoV particles over positive servings",
+        "unit": "month",
+        "unitCategory": "Time",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Other",
+        "distribution": "Generalized Poisson 3",
+        "variabilitySubject": "height",
+        "minValue": "0.5",
+        "maxValue": "40000.0",
+        "error": "0.2"
+      },
+      {
+        "id": "prev18",
+        "classification": "OUTPUT",
+        "name": "prev18",
+        "description": "proportion of servings with >18 NoV",
+        "unit": "g/daily portion",
+        "unitCategory": "Mass",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Other",
+        "distribution": "Binomial 1",
+        "variabilitySubject": "weight",
+        "minValue": "0.2",
+        "maxValue": "50000.0",
+        "error": "0.1"
+      },
+      {
+        "id": "prev100",
+        "classification": "OUTPUT",
+        "name": "prev100",
+        "description": "proportion of servings with >100 NoV",
+        "unit": "objects/g",
+        "unitCategory": "Number Content (count/mass)",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Feces",
+        "distribution": "Discrete distribution",
+        "variabilitySubject": "color",
+        "minValue": "0.12",
+        "maxValue": "60000.0",
+        "error": "0.01"
+      },
+      {
+        "id": "prev1000",
+        "classification": "OUTPUT",
+        "name": "prev1000",
+        "description": "proportion of servings with >1000 NoV",
+        "unit": "Bq/L",
+        "unitCategory": "Energy content rate",
+        "dataType": "DOUBLE",
+        "source": "Model result",
+        "subject": "Feces",
+        "distribution": "Geometric 1",
+        "variabilitySubject": "shape",
+        "minValue": "0.142",
+        "maxValue": "70000.0",
+        "error": "0.02"
+      },
+      {
+        "id": "alpha",
+        "classification": "INPUT",
+        "name": "alpha",
+        "description": "Alpha parameter in dose response model related to probability of infection (shape of beta distribution)",
+        "unit": "month",
+        "unitCategory": "Time",
+        "dataType": "DOUBLE",
+        "source": "Expert opinion",
+        "subject": "Carcass skin",
+        "distribution": "Half-normal 1",
+        "value": "0.04",
+        "variabilitySubject": "age",
+        "minValue": "0.01",
+        "maxValue": "80000.0",
+        "error": "0.03"
+      },
+      {
+        "id": "beta",
+        "classification": "INPUT",
+        "name": "beta",
+        "description": "Beta parameter in dose response model related to probability of infection (scale of beta distribution)",
+        "unit": "Inertia",
+        "unitCategory": "Energy content",
+        "dataType": "DOUBLE",
+        "source": "Estimate",
+        "subject": "Product",
+        "distribution": "Negative Binomial 1",
+        "value": "0.055",
+        "variabilitySubject": "concentration",
+        "minValue": "0.002",
+        "maxValue": "90000.0",
+        "error": "0.4"
+      },
+      {
+        "id": "eta",
+        "classification": "INPUT",
+        "name": "eta",
+        "description": "Eta parameter in dose response model related to probability of illnes (scale parameter for gamma distribution)",
+        "unit": "kcal/portion",
+        "unitCategory": "Other",
+        "dataType": "DOUBLE",
+        "source": "Assumption",
+        "subject": "Package",
+        "distribution": "Arcsine 2",
+        "value": "0.00255",
+        "variabilitySubject": "difficulty",
+        "minValue": "0.01",
+        "maxValue": "100000.0",
+        "error": "0.5"
+      },
+      {
+        "id": "r",
+        "classification": "INPUT",
+        "name": "r",
+        "description": "R parameter in dose response model related to probability of illness (shape parameter for gamma distribution)",
+        "unit": "dimensionless",
+        "unitCategory": "Dimensionless",
+        "dataType": "DOUBLE",
+        "source": "Not applicable ",
+        "subject": "Belly",
+        "distribution": "Multivariate Gaussian 2",
+        "value": "0.086",
+        "variabilitySubject": "species",
+        "minValue": "0.1",
+        "maxValue": "110000.0",
+        "error": "0.05"
+      }
+    ]
+  }
+}
