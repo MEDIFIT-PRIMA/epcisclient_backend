@@ -77,15 +77,13 @@ private fun convertGeneralInformation(originalNode: JsonNode, mapper: ObjectMapp
     originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
 
     if (originalNode.has("author")) {
-        val newAuthors = mapper.createArrayNode()
-        originalNode["author"].forEach { newAuthors.add(convertContact(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:author", newAuthors)
+        val newAuthors = newNode.putArray("fsk:author")
+        originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
     }
 
     if (originalNode.has("creator")) {
-        val newAuthors = mapper.createArrayNode()
-        originalNode["creator"].forEach { newAuthors.add(convertContact(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:creator", newAuthors)
+        val newCreators = newNode.putArray("fsk:author")
+        originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
     }
 
     // TODO: creationDate (LocalDate)
@@ -97,9 +95,8 @@ private fun convertGeneralInformation(originalNode: JsonNode, mapper: ObjectMapp
     originalNode.copyStringChild("format", newNode, "fsk:format")
 
     if (originalNode.has("reference")) {
-        val newArray = mapper.createArrayNode()
-        originalNode["reference"].forEach { newArray.add(convertReference(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:reference", newArray)
+        val newArray = newNode.putArray("fsk:reference")
+        originalNode["reference"].map { convertReference(it, mapper) }.forEach(newArray::add)
     }
 
     originalNode.copyStringChild("language", newNode, "fsk:language")
@@ -119,15 +116,13 @@ private fun convertDataModelGeneralInformation(originalNode: JsonNode, mapper: O
     originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
 
     if (originalNode.has("author")) {
-        val newAuthors = mapper.createArrayNode()
-        originalNode["author"].forEach { newAuthors.add(convertContact(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:author", newAuthors)
+        val newAuthors = newNode.putArray("fsk:author")
+        originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
     }
 
     if (originalNode.has("creator")) {
-        val newAuthors = mapper.createArrayNode()
-        originalNode["creator"].forEach { newAuthors.add(convertContact(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:creator", newAuthors)
+        val newCreators = newNode.putArray("fsk:creator")
+        originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
     }
 
     // TODO: creationDate (LocalDate)
@@ -139,9 +134,8 @@ private fun convertDataModelGeneralInformation(originalNode: JsonNode, mapper: O
     originalNode.copyStringChild("format", newNode, "fsk:format")
 
     if (originalNode.has("reference")) {
-        val newArray = mapper.createArrayNode()
-        originalNode["reference"].forEach { newArray.add(convertReference(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:reference", newArray)
+        val newArray = newNode.putArray("fsk:reference")
+        originalNode["reference"].map { convertReference(it, mapper) }.forEach(newArray::add)
     }
 
     originalNode.copyStringChild("language", newNode, "fsk:language")
@@ -160,15 +154,13 @@ private fun convertGenericModelScope(originalNode: JsonNode, mapper: ObjectMappe
     val newNode = mapper.createObjectNode()
 
     if (originalNode.has("product")) {
-        val newProducts = mapper.createArrayNode()
-        originalNode["product"].forEach { newProducts.add(convertProduct(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:product", newProducts)
+        val newProducts = newNode.putArray("fsk:product")
+        originalNode["product"].map { convertProduct(it, mapper) }.forEach(newProducts::add)
     }
 
     if (originalNode.has("hazard")) {
-        val newHazards = mapper.createArrayNode()
-        originalNode["hazard"].forEach { newHazards.add(convertHazard(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:hazard", newHazards)
+        val newHazards = newNode.putArray("fsk:hazard")
+        originalNode["hazard"].map { convertHazard(it, mapper) }.forEach(newHazards::add)
     }
 
     originalNode.copyStringChild("generalComment", newNode, "fsk:generalComment")
@@ -195,21 +187,18 @@ private fun convertGenericModelDataBackground(originalNode: JsonNode, mapper: Ob
     newNode.set<ObjectNode>("fsk:study", convertStudy(originalNode["study"], mapper))
 
     if (originalNode.has("studySample")) {
-        val newSamples = mapper.createArrayNode()
-        originalNode["studySample"].forEach { newSamples.add(convertStudySample(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:studySample", newSamples)
+        val newSamples = newNode.putArray("fsk:studySample")
+        originalNode["studySample"].map { convertStudySample(it, mapper) }.forEach(newSamples::add)
     }
 
     if (originalNode.has("laboratory")) {
-        val newLabs = mapper.createArrayNode()
-        originalNode["laboratory"].forEach { newLabs.add(convertLaboratory(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:laboratory", newLabs)
+        val newLabs = newNode.putArray("fsk:laboratory")
+        originalNode["laboratory"].map { convertLaboratory(it, mapper) }.forEach(newLabs::add)
     }
 
     if (originalNode.has("assay")) {
-        val newAssays = mapper.createArrayNode()
+        val newAssays = newNode.putArray("fsk:assay")
         originalNode["assay"].map { convertAssay(it, mapper) }.forEach(newAssays::add)
-        newNode.set<ObjectNode>("fsk:assay", newAssays)
     }
 
     return newNode
@@ -270,9 +259,8 @@ private fun convertDataModelModelMath(originalNode: JsonNode, mapper: ObjectMapp
     val newNode = mapper.createObjectNode()
 
     if (originalNode.has("parameter")) {
-        val newParameters = mapper.createArrayNode()
-        originalNode["parameter"].forEach { newParameters.add(convertParameter(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:parameter", newParameters)
+        val newParameters = newNode.putArray("fsk:parameter")
+        originalNode["parameter"].map { convertParameter(it, mapper) }.forEach(newParameters::add)
     }
 
     return newNode
@@ -427,15 +415,13 @@ private fun convertPredictiveModelGeneralInformation(originalNode: JsonNode, map
     originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
 
     if (originalNode.has("author")) {
-        val newAuthors = mapper.createArrayNode()
+        val newAuthors = newNode.putArray("fsk:author")
         originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
-        newNode.set<ObjectNode>("fsk:author", newAuthors)
     }
 
     if (originalNode.has("creator")) {
-        val newCreators = mapper.createArrayNode()
+        val newCreators = newNode.putArray("fsk:creator")
         originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
-        newNode.set<ObjectNode>("fsk:creator", newCreators)
     }
 
     // TODO: creationDate (LocalDate)
@@ -447,9 +433,8 @@ private fun convertPredictiveModelGeneralInformation(originalNode: JsonNode, map
     originalNode.copyStringChild("format", newNode, "fsk:format")
 
     if (originalNode.has("reference")) {
-        val newReferences = mapper.createArrayNode()
+        val newReferences = newNode.putArray("fsk:reference")
         originalNode["reference"].map { convertContact(it, mapper) }.forEach(newReferences::add)
-        newNode.set<ObjectNode>("fsk:reference", newReferences)
     }
 
     originalNode.copyStringChild("language", newNode, "fsk:language")
@@ -469,15 +454,13 @@ private fun convertPredictiveModelScope(originalNode: JsonNode, mapper: ObjectMa
     val newNode = mapper.createObjectNode()
 
     if (originalNode.has("product")) {
-        val newProducts = mapper.createArrayNode()
-        originalNode["product"].forEach { newProducts.add(convertProduct(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:product", newProducts)
+        val newProducts = newNode.putArray("fsk:product")
+        originalNode["product"].map { convertProduct(it, mapper) }.forEach(newProducts::add)
     }
 
     if (originalNode.has("hazard")) {
-        val newHazards = mapper.createArrayNode()
-        originalNode["hazard"].forEach { newHazards.add(convertHazard(it, mapper)) }
-        newNode.set<ObjectNode>("fsk:hazard", newHazards)
+        val newHazards = newNode.putArray("fsk:hazard")
+        originalNode["hazard"].map { convertHazard(it, mapper) }.forEach(newHazards::add)
     }
 
     originalNode.copyStringChild("generalComment", newNode, "fsk:generalComment")
@@ -495,21 +478,18 @@ private fun convertPredictiveModelDataBackground(originalNode: JsonNode, mapper:
     newNode.set<ObjectNode>("fsk:study", convertStudy(originalNode["study"], mapper))
 
     if (originalNode.has("studySample")) {
-        val newSamples = mapper.createArrayNode()
+        val newSamples = newNode.putArray("fsk:studySample")
         originalNode["studySample"].map { convertStudySample(it, mapper) }.forEach(newSamples::add)
-        newNode.set<ObjectNode>("fsk:studySample", newSamples)
     }
 
     if (originalNode.has("laboratory")) {
-        val newLabs = mapper.createArrayNode()
+        val newLabs = newNode.putArray("fsk:laboratory")
         originalNode["laboratory"].map { convertLaboratory(it, mapper) }.forEach(newLabs::add)
-        newNode.set<ObjectNode>("fsk:laboratory", newLabs)
     }
 
     if (originalNode.has("assay")) {
-        val newAssays = mapper.createArrayNode()
+        val newAssays = newNode.putArray("fsk:assay")
         originalNode["assay"].map { convertAssay(it, mapper) }.forEach(newAssays::add)
-        newNode.set<ObjectNode>("fsk:assay", newAssays)
     }
 
     return newNode
@@ -520,15 +500,13 @@ private fun convertPredictiveModelModelMath(originalNode: JsonNode, mapper: Obje
     val newNode = mapper.createObjectNode()
 
     if (originalNode.has("parameter")) {
-        val newParameters = mapper.createArrayNode()
+        val newParameters = newNode.putArray("fsk:parameter")
         originalNode["parameter"].map { convertParameter(it, mapper) }.forEach(newParameters::add)
-        newNode.set<ObjectNode>("fsk:parameter", newParameters)
     }
 
     if (originalNode.has("qualityMeasures")) {
-        val newMeasures = mapper.createArrayNode()
+        val newMeasures = newNode.putArray("fsk:qualityMeasures")
         originalNode["qualityMeasures"].map { convertQualityMeasures(it, mapper) }.forEach(newMeasures::add)
-        newNode.set<ObjectNode>("fsk:qualityMeasures", newMeasures)
     }
 
     if (originalNode.has("modelEquation")) {
