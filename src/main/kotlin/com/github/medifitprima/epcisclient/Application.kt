@@ -99,13 +99,16 @@ fun Application.module(testing: Boolean = false) {
 class MedifitClient(private val token: String) {
 
     private val url = "https://demo-repository.openepcis.io"
-    private val httpClient = HttpClient()
 
     suspend fun getModels(): List<JsonNode> = withContext(Dispatchers.IO) {
-        // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
-        val response: HttpResponse = httpClient.post("$url/queries/SimpleEventQuery") {
-            contentType(ContentType.Application.Json)
-            body = """
+
+        val models: MutableList<JsonNode>
+
+        HttpClient().use { client ->
+            // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
+            val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
+                contentType(ContentType.Application.Json)
+                body = """
             {
                 "queryType": "events",
                 "query": {
@@ -129,28 +132,31 @@ class MedifitClient(private val token: String) {
                 }
             }
         """.trimIndent()
-        }
+            }
 
-        val models: MutableList<JsonNode>
-        if (response.status == HttpStatusCode.OK) {
-            models = mutableListOf<JsonNode>()
-            val jsonResponse = objectMapper.readTree(response.readText())
-            val eventList2 = jsonResponse.get("eventList")
-            eventList2.forEach { models.add(it.get("fsk:model")) }
-        } else {
-            models = mutableListOf()
+            if (response.status == HttpStatusCode.OK) {
+                models = mutableListOf<JsonNode>()
+                val jsonResponse = objectMapper.readTree(response.readText())
+                val eventList2 = jsonResponse.get("eventList")
+                eventList2.forEach { models.add(it.get("fsk:model")) }
+            } else {
+                models = mutableListOf()
+            }
         }
 
         models
     }
 
     suspend fun uploadModel(bodyParameter: JsonNode) {
-        val response: HttpResponse = httpClient.post("$url/capture") {
-            headers {
-                append(HttpHeaders.Authorization, token)
+        HttpClient().use { client ->
+            val response: HttpResponse = client.post("$url/capture") {
+                headers {
+                    append(HttpHeaders.Authorization, token)
+                }
+                contentType(ContentType.Application.Json)
+                body = bodyParameter.toPrettyString()
             }
-            contentType(ContentType.Application.Json)
-            body = bodyParameter.toPrettyString()
+            println("Upload response: " + response.status)
         }
     }
 }
