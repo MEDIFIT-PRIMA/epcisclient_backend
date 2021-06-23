@@ -19,9 +19,9 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.io.path.createTempDirectory
 
-val getMedifit_token = ""
 val objectMapper = ObjectMapper()
-val client = HttpClient()
+val medifit_token = ""
+val medifitClient = MedifitClient(medifit_token)
 
 val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate.json"))
 
@@ -46,7 +46,7 @@ fun Application.module(testing: Boolean = false) {
     routing {
 
         get("/models") {
-            val models = getModels(client)
+            val models = medifitClient.getModels()
             call.respond(models)
         }
 
@@ -87,7 +87,7 @@ fun Application.module(testing: Boolean = false) {
 
                 println(bodyTemplate.toPrettyString())
 
-                uploadModel(client, bodyTemplate)
+                medifitClient.uploadModel(bodyTemplate)
 
                 // TODO: return OK
                 call.respond(medifitMetadata)
@@ -96,13 +96,16 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-private suspend fun getModels(client: HttpClient): List<JsonNode> = withContext(Dispatchers.IO) {
-    // Actual MEDIFIT request
-    val url = "https://demo-repository.openepcis.io"
-    // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
-    val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
-        contentType(ContentType.Application.Json)
-        body = """
+class MedifitClient(private val token: String) {
+
+    private val url = "https://demo-repository.openepcis.io"
+    private val httpClient = HttpClient()
+
+    suspend fun getModels(): List<JsonNode> = withContext(Dispatchers.IO) {
+        // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
+        val response: HttpResponse = httpClient.post("$url/queries/SimpleEventQuery") {
+            contentType(ContentType.Application.Json)
+            body = """
             {
                 "queryType": "events",
                 "query": {
@@ -126,33 +129,30 @@ private suspend fun getModels(client: HttpClient): List<JsonNode> = withContext(
                 }
             }
         """.trimIndent()
-    }
-
-    var models: MutableList<JsonNode>
-    if (response.status == HttpStatusCode.OK) {
-        models = mutableListOf<JsonNode>()
-        val jsonResponse = objectMapper.readTree(response.readText())
-        val eventList2 = jsonResponse.get("eventList")
-        eventList2.forEach { models.add(it.get("fsk:model")) }
-    } else {
-        models = mutableListOf<JsonNode>()
-    }
-
-    models
-}
-
-private suspend fun uploadModel(client: HttpClient, bodyParameter: JsonNode) {
-    val url = "https://demo-repository.openepcis.io"
-    val response: HttpResponse = client.post("$url/capture") {
-        headers {
-            append(HttpHeaders.Authorization, getMedifit_token)
         }
-        contentType(ContentType.Application.Json)
-        body = bodyParameter.toPrettyString()
+
+        val models: MutableList<JsonNode>
+        if (response.status == HttpStatusCode.OK) {
+            models = mutableListOf<JsonNode>()
+            val jsonResponse = objectMapper.readTree(response.readText())
+            val eventList2 = jsonResponse.get("eventList")
+            eventList2.forEach { models.add(it.get("fsk:model")) }
+        } else {
+            models = mutableListOf()
+        }
+
+        models
     }
 
-    // TODO: process response code
-    println("/capture response code: ${response.status}")
+    suspend fun uploadModel(bodyParameter: JsonNode) {
+        val response: HttpResponse = httpClient.post("$url/capture") {
+            headers {
+                append(HttpHeaders.Authorization, token)
+            }
+            contentType(ContentType.Application.Json)
+            body = bodyParameter.toPrettyString()
+        }
+    }
 }
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
