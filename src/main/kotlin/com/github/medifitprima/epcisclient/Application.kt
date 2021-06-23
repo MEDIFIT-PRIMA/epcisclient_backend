@@ -3,9 +3,6 @@ package com.github.medifitprima.epcisclient
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import de.bund.bfr.fskml.FSKML
-import de.unirostock.sems.cbarchive.ArchiveEntry
-import de.unirostock.sems.cbarchive.CombineArchive
 import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.request.*
