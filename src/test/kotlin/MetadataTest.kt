@@ -42,7 +42,13 @@ class MetadataTest {
         medifitMetadata.checkMetadata()
     }
 
-    // TODO: testConvertExposureModel
+    @Test
+    fun testConvertExposureModel() {
+        val tree = mapper.readTree(File("src/test/resources/exposureModel.json"))
+        val medifitMetadata = createMedifitMetadata(tree, mapper)
+        medifitMetadata.checkMetadata()
+    }
+
     // TODO: testConvertToxicologicalModel
     // TODO: testConvertDoseResponseModel
     // TODO: testConvertProcessModel

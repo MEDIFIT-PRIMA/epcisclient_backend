@@ -41,6 +41,12 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
                 .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
                 .set<ObjectNode>("fsk:modelMath", convertGenericModelModelMath(fskmlMetadata["modelMath"], mapper))
         }
+        "exposureModel" -> {
+            objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", convertGenericModelScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", convertGenericModelModelMath(fskmlMetadata["modelMath"], mapper))
+        }
     }
 
     return objectNode
