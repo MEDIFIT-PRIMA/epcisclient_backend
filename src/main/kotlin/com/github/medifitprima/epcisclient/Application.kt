@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.io.path.createTempDirectory
 
+
 val objectMapper = ObjectMapper()
 val medifit_token = ""
 val medifitClient = MedifitClient(medifit_token)
@@ -47,6 +48,11 @@ fun Application.module(testing: Boolean = false) {
 
         get("/models") {
             val models = medifitClient.getModels()
+            call.respond(models)
+        }
+
+        get("/simplemodels") {
+            val models = medifitClient.getSimpleModels()
             call.respond(models)
         }
 
@@ -96,6 +102,8 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
+
+
 class MedifitClient(private val token: String) {
 
     private val url = "https://demo-repository.openepcis.io"
@@ -135,7 +143,7 @@ class MedifitClient(private val token: String) {
             }
 
             if (response.status == HttpStatusCode.OK) {
-                models = mutableListOf<JsonNode>()
+                models = mutableListOf()
                 val jsonResponse = objectMapper.readTree(response.readText())
                 val eventList2 = jsonResponse.get("eventList")
                 eventList2.forEach { models.add(it.get("fsk:model")) }
@@ -145,6 +153,51 @@ class MedifitClient(private val token: String) {
         }
 
         models
+    }
+
+    suspend fun getSimpleModels(): List<ModelView> {
+
+        HttpClient().use { client ->
+            // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
+            val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
+                contentType(ContentType.Application.Json)
+                body = """
+            {
+                "queryType": "events",
+                "query": {
+                    "@context": {
+                        "fsk": "https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json"
+                    },
+                    "EQ_INNER_fsk:modelType": [
+                        "GenericModel",
+                        "DataModel",
+                        "PredictiveModel",
+                        "OtherModel",
+                        "ExposureModel",
+                        "ToxicologicalModel",
+                        "DoseResponseModel",
+                        "ProcessModel",
+                        "ConsumptionModel",
+                        "HealthModel",
+                        "RiskModel",
+                        "QraModel"
+                    ]
+                }
+            }
+        """.trimIndent()
+            }
+
+            if (response.status == HttpStatusCode.OK) {
+                val jsonResponse: JsonNode = withContext(Dispatchers.Default) {
+                    objectMapper.readTree(response.readText())
+                }
+                val eventList = jsonResponse.get("eventList")
+
+                return eventList.map { it["fsk:model"] }.map { extractModelView(it) }
+            }
+        }
+
+        return emptyList()
     }
 
     suspend fun uploadModel(bodyParameter: JsonNode) {
