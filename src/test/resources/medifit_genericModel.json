@@ -1,0 +1,196 @@
+{
+    "fsk:dataBackground": {
+        "fsk:assay": [
+            {
+                "fsk:detectionLimit": "30-300",
+                "fsk:description": "spectroscopic analytical procedure used to measure the concentration of protein in a solution. It is subjective, i.e., dependent on the amino acid composition of the measured protein",
+                "fsk:name": "Bradford protein assay",
+                "fsk:quantificationLimit": "5000 - 8000",
+                "fsk:contaminationRange": "500-4000"
+            },
+            {
+                "fsk:description": "ELISA is a popular format of \"wet-lab\" type analytic biochemistry assay that uses a solid-phase enzyme immunoassay (EIA) to detect the presence of a substance, usually an antigen, in a liquid sample or wet sample.",
+                "fsk:name": "ELISA",
+                "fsk:contaminationRange": "200-800"
+            },
+            {
+                "fsk:description": "standard method used to determine virus concentration in terms of infectious dose. Viral plaque assays determine the number of plaque forming units (pfu) in a virus sample, which is one measure of virus quantity.",
+                "fsk:name": "Plaque-Assay",
+                "fsk:contaminationRange": "0,5 - 400"
+            }
+        ],
+        "fsk:study": {
+            "fsk:protocolURI": "https://url-for-study-protocol-location.bfr.bund.de",
+            "fsk:protocolParametersName": "Parameter 1",
+            "fsk:description": "We show how to upload a fskx file from FSK-Web to Zenodo repository.",
+            "fsk:assayTechnologyType": "Anatomic-pathologic Tests",
+            "fsk:protocolComponentsType": "hardware",
+            "fsk:title": "FSK-Lab and Zenodo Knowledge Junction",
+            "fsk:assayMeasurementType": "It works or it doesn't",
+            "fsk:protocolDescription": "The protocol is definitly not made up",
+            "fsk:accreditationProcedureForTheAssayTechnology": "ISO/IEC17025",
+            "fsk:assayTechnologyPlatform": "Orbital Platform",
+            "fsk:protocolVersion": "version 1.0",
+            "fsk:identifier": "workshop_example_05132019",
+            "fsk:protocolName": "Extraction Protocol Of FSK",
+            "fsk:designType": "Trial and Error",
+            "fsk:protocolComponentsName": "windows pc"
+        },
+        "fsk:studySample": [
+            {
+                "fsk:samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+                "fsk:samplingPoint": "Catering",
+                "fsk:sampleName": "Sample 1",
+                "fsk:samplingStrategy": "Convenient sampling",
+                "fsk:samplingMethod": "According to Reg 152/2009",
+                "fsk:samplingSize": "10000.0",
+                "fsk:lotSizeUnit": "log10(CFU/25g)",
+                "fsk:typeOfSamplingProgram": "Diet study",
+                "fsk:protocolOfSampleCollection": "SampleID_1",
+                "fsk:samplingPlan": "Random sampling"
+            },
+            {
+                "fsk:samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+                "fsk:samplingPoint": "Air transport",
+                "fsk:sampleName": "Sample 2",
+                "fsk:samplingStrategy": "Selective sampling",
+                "fsk:samplingMethod": "According to Reg 333/2007",
+                "fsk:samplingSize": "1000.0",
+                "fsk:lotSizeUnit": "µL/kg",
+                "fsk:typeOfSamplingProgram": "Monitoring",
+                "fsk:protocolOfSampleCollection": "SampleID_2",
+                "fsk:samplingPlan": "Stratified sampling"
+            },
+            {
+                "fsk:samplingWeight": "description of the method employed to compute sampling weight (nonresponse-adjusted weight)",
+                "fsk:samplingPoint": "Household",
+                "fsk:sampleName": "Sample 3",
+                "fsk:samplingStrategy": "Census",
+                "fsk:samplingMethod": "HACCP and owns check",
+                "fsk:samplingSize": "2000.0",
+                "fsk:lotSizeUnit": "µL/kg",
+                "fsk:typeOfSamplingProgram": "Control and eradication programmes",
+                "fsk:protocolOfSampleCollection": "SampleID_3",
+                "fsk:samplingPlan": "Multi-stage random sampling"
+            }
+        ],
+        "fsk:laboratory": [
+            {
+                "fsk:name": "National High Magnetic Field Laboratory",
+                "fsk:country": "United States"
+            },
+            {
+                "fsk:name": "Everest Medical Laboratory",
+                "fsk:country": "India"
+            }
+        ]
+    },
+    "fsk:modelType": "GenericModel",
+    "fsk:modelMath": {},
+    "fsk:scope": {
+        "fsk:hazard": [
+                {
+                    "fsk:noObservedAdverseAffectLevel": "10 mg",
+                    "fsk:acuteReferenceDose": "80 mg",
+                    "fsk:acceptableOperatorsExposureLevel": "50 mg",
+                    "fsk:unit": "mg/kg",
+                    "fsk:type": "Pesticide residues",
+                    "fsk:acceptableDailyIntake": "20 mg",
+                    "fsk:maximumResidueLimit": "0.01 mg/kg",
+                    "fsk:description": "powder",
+                    "fsk:lowestObservedAdverseAffectLevel": "40 mg",
+                    "fsk:name": "Thiabendazole",
+                    "fsk:sourceOfContamination": "spray",
+                    "fsk:adverseEffect": "washing"
+                }
+            ],
+        "fsk:product": [
+            {
+                "fsk:expiryDate": "2011-11-30",
+                "fsk:unit": "Meal",
+                "fsk:productionDate": "2011-10-29",
+                "fsk:description": "orange color",
+                "fsk:originCountry": "Italy",
+                "fsk:name": "Oranges",
+                "fsk:originArea": "Bologna",
+                "fsk:fisheriesArea": "Azores Grounds"
+            }
+        ],
+        "fsk:generalComment": "workshop example with fictitious data",
+        "fsk:temporalInformation": "1990 - 2000"
+    },
+    "fsk:generalInformation": {
+        "fsk:author": [
+            {
+                "fsk:givenName": "John",
+                "fsk:region": "Berlin-Brandenburg",
+                "fsk:email": "johnsmith@mail.com",
+                "fsk:telephone": "030 12345",
+                "fsk:familyName": "Smith",
+                "fsk:country": "Germany",
+                "fsk:organization": "BfR",
+                "fsk:streetAddress": "Nahmitzer Damm 40",
+                "fsk:title": "Dr."
+            },
+            {
+                "fsk:givenName": "Jason",
+                "fsk:region": "Brandenburg",
+                "fsk:email": "clarke@mymail.com",
+                "fsk:telephone": "03301 1369158",
+                "fsk:familyName": "Clarke",
+                "fsk:country": "United States",
+                "fsk:organization": "BfR",
+                "fsk:streetAddress": "Mainstreet",
+                "fsk:title": "Mr."
+            }
+        ],
+        "fsk:identifier": "toymodel",
+        "fsk:description": "This model was generated as an example.",
+        "fsk:name": "Toy Model",
+        "fsk:reference": [
+            {
+                "fsk:date": "1905-07-01",
+                "fsk:issue": "0",
+                "fsk:isReferenceDescription": "true",
+                "fsk:volume": "0",
+                "fsk:doi": "10.5072/zenodo.168114",
+                "fsk:website": "https://www.nature.com",
+                "fsk:status": "Accepted",
+                "fsk:authorList": "Jack Bauer, Kiefer Sutherland",
+                "fsk:title": "Quantitative Risk Assessment in Food Establishments: Evaluating Strategies and Behavior on the Risk Associated with Fats in Foods",
+                "fsk:abstract": "This research looks at the work of Margaret C. Anderson, the editor of the Little Review.  The review published first works by Sherwood Anderson, James Joyce, Wyndham Lewis, and Ezra Pound.  This research draws upon mostly primary sources including memoirs, published letters, and a complete collection of the Little Review. Most prior research on Anderson focuses on her connection to the famous writers and personalities that she published and associated with.  This focus undermines her role as the dominant creative force behind one of the most influential little magazines published in the 20th Century. This case example shows how little magazine publishing is arguably a literary art"
+            },
+            {
+                "fsk:date": "1905-07-06",
+                "fsk:issue": "0",
+                "fsk:isReferenceDescription": "true",
+                "fsk:volume": "0",
+                "fsk:doi": "10.1002/zenodo.211137",
+                "fsk:website": "www.sciencemag.org",
+                "fsk:status": "Legal",
+                "fsk:authorList": "James Bond, Timothy Dalton",
+                "fsk:title": "Norwalk virus: How infectious is it?",
+                "fsk:abstract": "This project involves discovering how the American Revolution was remembered during the nineteenth century.  The goal is to show that the American Revolution was memorialized by the actions of the United States government during the 1800s. This has been done by examining events such as the Supreme Court cases of John Marshall and the Nullification Crisis. Upon examination of these events, it becomes clear that John Marshall and John Calhoun (creator of the Doctrine of Nullification) attempted to use the American Revolution to bolster their claims by citing speeches from Founding Fathers. Through showing that the American Revolution lives on in memory, this research highlights the importance of the revolution in shaping the actions of the United States government."
+            },
+            {
+                "fsk:date": "1905-07-07",
+                "fsk:issue": "0",
+                "fsk:isReferenceDescription": "true",
+                "fsk:volume": "0",
+                "fsk:doi": "10.1111/j.153xxx924.1999.tb01143.x",
+                "fsk:website": "http://www.techbriefs.com",
+                "fsk:status": "Peer reviewed",
+                "fsk:authorList": "Jack Ryan, Alec Baldwin, Harrison Ford",
+                "fsk:title": "Dose Response Models For Infectious Gastronomies",
+                "fsk:abstract": "The purpose of this research is to identify a subtype of autism called Developmental Verbal Dyspraxia (DVD).  DVD is a motor-speech problem, disabling oral-motor movements needed for speaking. The first phase of the project involves a screening interview where we identify DVD and Non-DVD kids.  We also use home videos to validate answers on the screening interview.  The final phase involves home visits where we use several assessments to confirm the child’s diagnosis and examine the connection between manual and oral motor challenges. By identifying DVD as a subtype of Autism, we will eliminate the assumption that all Autistics have the same characteristics. This will allow for more individual consideration of Autistic people and may direct future research on the genetic factors in autism."
+            }
+        ],
+        "fsk:rights": "false",
+        "fsk:url": "",
+        "fsk:format": ".fskx",
+        "fsk:status": "Uncurated",
+        "fsk:language": "English",
+        "fsk:source": "EVENTS (MEETING OR CONFERENCE)",
+        "fsk:objective": "This model can be used for tutorial purpose."
+    }
+}

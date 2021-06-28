@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.Test
 import java.io.File
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class MetadataTest {
@@ -56,6 +57,18 @@ class MetadataTest {
     // TODO: testConvertHealthModel
     // TODO: testConvertRiskModel
     // TODO: testConvertQraModel
+
+    @Test
+    fun testExtractModelView() {
+        val tree = mapper.readTree(File("src/test/resources/medifit_genericModel.json"))
+        val modelView = extractModelView(tree)
+
+        assertEquals("GenericModel", modelView.type)
+        assertEquals("Toy Model", modelView.name)
+        assertTrue(modelView.software.isEmpty())
+        assertEquals("Oranges", modelView.products[0])
+        assertEquals("Thiabendazole", modelView.hazards[0])
+    }
 }
 
 fun JsonNode.checkMetadata() {

@@ -572,3 +572,47 @@ private fun JsonNode.copyDateChild(originalKey: String, newNode: ObjectNode, new
         newNode.put(newKey, localDate.toString())
     }
 }
+
+/** Utility data class for the API. Instead of sending the complete original metadata only keeps a subset used in the
+ * frontend. */
+data class ModelView(
+    val type: String,
+    val name: String,
+    val software: String,
+    val products: List<String>,
+    val hazards: List<String>
+)
+
+fun extractModelView(model: JsonNode): ModelView {
+    val modelType = model["fsk:modelType"]?.textValue() ?: ""
+    var name = ""
+    var software = ""
+    val products = mutableListOf<String>()
+    val hazards = mutableListOf<String>()
+
+    if (model.has("fsk:generalInformation")) {
+        val generalInformation = model["fsk:generalInformation"]
+        name = generalInformation["fsk:name"]?.textValue() ?: ""
+        software = generalInformation["fsk:languageWrittenIn"]?.textValue() ?: ""
+    }
+
+    if (model.has("fsk:scope")) {
+        val scope = model["fsk:scope"]
+
+        // Get products{
+        scope["fsk:product"].map { productNode ->
+            if (productNode.has("fsk:name")) {
+                products.add(productNode["fsk:name"].textValue())
+            }
+        }
+
+        // Get hazards
+        scope["fsk:hazard"].map { hazardNode ->
+            if (hazardNode.has("fsk:name")) {
+                hazards.add(hazardNode["fsk:name"].textValue())
+            }
+        }
+    }
+
+    return ModelView(modelType, name, software, products, hazards)
+}
