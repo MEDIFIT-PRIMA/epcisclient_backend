@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.github.medifitprima.epcisclient.metadata.GenericModelConverter
 import java.time.LocalDate
 
 fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNode {
@@ -16,10 +17,11 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
 
     when (modelType.textValue()) {
         "genericModel" -> {
-            objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-            objectNode.set<ObjectNode>("fsk:scope", convertGenericModelScope(fskmlMetadata["scope"], mapper))
-            objectNode.set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
-            objectNode.set<ObjectNode>("fsk:modelMath", convertGenericModelModelMath(fskmlMetadata["modelMath"], mapper))
+            val converter = GenericModelConverter()
+            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+            objectNode.set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
+            objectNode.set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
+            objectNode.set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "dataModel" -> {
             objectNode.set<ObjectNode>("fsk:generalInformation", convertDataModelGeneralInformation(fskmlMetadata["generalInformation"], mapper))
