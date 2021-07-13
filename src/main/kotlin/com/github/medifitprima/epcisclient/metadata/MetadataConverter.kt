@@ -1,4 +1,4 @@
-package com.github.medifitprima.epcisclient.metadata;
+package com.github.medifitprima.epcisclient.metadata
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -184,6 +184,29 @@ fun convertAssay(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
     originalNode.copyStringChild("leftCensoredData", newNode, "fsk:leftCensoredData")
     originalNode.copyStringChild("contaminationRange", newNode, "fsk:contaminationRange")
     originalNode.copyStringChild("uncertaintyValue", newNode, "fsk:uncertaintyValue")
+
+    return newNode
+}
+
+fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+    originalNode.copyStringChild("id", newNode, "fsk:id")
+    originalNode.copyStringChild("classification", newNode, "fsk:classification")
+    originalNode.copyStringChild("name", newNode, "fsk:name")
+    originalNode.copyStringChild("description", newNode, "fsk:description")
+    originalNode.copyStringChild("unit", newNode, "fsk:unit")
+    originalNode.copyStringChild("unitCategory", newNode, "fsk:unitCategory")
+    originalNode.copyStringChild("dataType", newNode, "fsk:dataType")
+    originalNode.copyStringChild("source", newNode, "fsk:source")
+    originalNode.copyStringChild("subject", newNode, "fsk:subject")
+    originalNode.copyStringChild("distribution", newNode, "fsk:distribution")
+    originalNode.copyStringChild("value", newNode, "fsk:value")
+    // TODO: reference
+    originalNode.copyStringChild("variabilitySubject", newNode, "fsk:variabilitySubject")
+    originalNode.copyStringChild("minValue", newNode, "fsk:minValue")
+    originalNode.copyStringChild("maxValue", newNode, "fsk:maxValue")
+    originalNode.copyStringChild("error", newNode, "fsk:error")
 
     return newNode
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.github.medifitprima.epcisclient.metadata.DataModelConverter
 import com.github.medifitprima.epcisclient.metadata.GenericModelConverter
 import java.time.LocalDate
 
@@ -24,10 +25,11 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
             objectNode.set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "dataModel" -> {
-            objectNode.set<ObjectNode>("fsk:generalInformation", convertDataModelGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", convertGenericModelScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", convertDataModelModelMath(fskmlMetadata["modelMath"], mapper))
+            val converter = DataModelConverter()
+            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "predictiveModel" -> {
             objectNode.set<ObjectNode>("fsk:generalInformation", convertPredictiveModelGeneralInformation(fskmlMetadata["generalInformation"], mapper))
@@ -83,45 +85,6 @@ private fun convertGeneralInformation(originalNode: JsonNode, mapper: ObjectMapp
 
     if (originalNode.has("creator")) {
         val newCreators = newNode.putArray("fsk:author")
-        originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
-    }
-
-    // TODO: creationDate (LocalDate)
-    // TODO: modificationDate (LocalDate[])
-
-    originalNode.copyStringChild("rights", newNode, "fsk:rights")
-    originalNode.copyStringChild("availability", newNode, "fsk:rights")
-    originalNode.copyStringChild("url", newNode, "fsk:url")
-    originalNode.copyStringChild("format", newNode, "fsk:format")
-
-    if (originalNode.has("reference")) {
-        val newArray = newNode.putArray("fsk:reference")
-        originalNode["reference"].map { convertReference(it, mapper) }.forEach(newArray::add)
-    }
-
-    originalNode.copyStringChild("language", newNode, "fsk:language")
-    originalNode.copyStringChild("status", newNode, "fsk:status")
-    originalNode.copyStringChild("objective", newNode, "fsk:objective")
-    originalNode.copyStringChild("description", newNode, "fsk:description")
-
-    return newNode
-}
-
-private fun convertDataModelGeneralInformation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-
-    originalNode.copyStringChild("name", newNode, "fsk:name")
-    originalNode.copyStringChild("source", newNode, "fsk:source")
-    originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
-
-    if (originalNode.has("author")) {
-        val newAuthors = newNode.putArray("fsk:author")
-        originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
-    }
-
-    if (originalNode.has("creator")) {
-        val newCreators = newNode.putArray("fsk:creator")
         originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
     }
 
@@ -251,18 +214,6 @@ private fun convertGenericModelModelMath(originalNode: JsonNode, mapper: ObjectM
 
     val newNode = mapper.createObjectNode()
     // TODO: implement convertModelMath
-    return newNode
-}
-
-private fun convertDataModelModelMath(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-
-    if (originalNode.has("parameter")) {
-        val newParameters = newNode.putArray("fsk:parameter")
-        originalNode["parameter"].map { convertParameter(it, mapper) }.forEach(newParameters::add)
-    }
-
     return newNode
 }
 
