@@ -22,6 +22,10 @@ fun JsonNode.copyBooleanChild(originalKey: String, newNode: ObjectNode, newKey: 
     this[originalKey]?.let { newNode.put(newKey, it.asText()) }
 }
 
+fun JsonNode.copyNumericalValue(originalKey: String, newNode: ObjectNode, newKey: String) {
+    this[originalKey]?.let { newNode.put(newKey, it.asText()) }
+}
+
 fun JsonNode.copyDateChild(originalKey: String, newNode: ObjectNode, newKey: String) {
     if (has(originalKey)) {
         val originalDate = this[originalKey] as ArrayNode
@@ -207,6 +211,36 @@ fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
     originalNode.copyStringChild("minValue", newNode, "fsk:minValue")
     originalNode.copyStringChild("maxValue", newNode, "fsk:maxValue")
     originalNode.copyStringChild("error", newNode, "fsk:error")
+
+    return newNode
+}
+
+fun convertQualityMeasures(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+    originalNode.copyNumericalValue("sse", newNode, "fsk:sse")
+    originalNode.copyNumericalValue("mse", newNode, "fsk:mse")
+    originalNode.copyNumericalValue("rmse", newNode, "fsk:rmse")
+    originalNode.copyNumericalValue("rsquared", newNode, "fsk:rsquared")
+    originalNode.copyNumericalValue("aic", newNode, "fsk:aic")
+    originalNode.copyNumericalValue("bic", newNode, "fsk:bic")
+    originalNode.copyStringChild("sensitivityAnalysis", newNode, "fsk:sensitivityAnalysis")
+
+    return newNode
+}
+
+fun convertModelEquation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
+
+    val newNode = mapper.createObjectNode()
+
+    originalNode.copyStringChild("name", newNode, "fsk:name")
+    originalNode.copyStringChild("modelEquationClass", newNode, "fsk:modelEquationClass")
+    // TODO: reference
+    originalNode.copyStringChild("modelEquation", newNode, "fsk:modelEquation")
+
+    if (originalNode.has("modelHypothesis")) {
+        newNode.set<ObjectNode>("fsk:modelHypothesis", originalNode["modelHypothesis"])
+    }
 
     return newNode
 }

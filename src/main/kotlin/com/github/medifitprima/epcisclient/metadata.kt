@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.medifitprima.epcisclient.metadata.DataModelConverter
 import com.github.medifitprima.epcisclient.metadata.GenericModelConverter
+import com.github.medifitprima.epcisclient.metadata.PredictiveModelConverter
 import java.time.LocalDate
 
 fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNode {
@@ -32,10 +33,11 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
                 .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "predictiveModel" -> {
-            objectNode.set<ObjectNode>("fsk:generalInformation", convertPredictiveModelGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", convertPredictiveModelScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", convertPredictiveModelDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", convertPredictiveModelModelMath(fskmlMetadata["modelMath"], mapper))
+            val converter = PredictiveModelConverter()
+            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "otherModel" -> {
             objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
@@ -354,122 +356,6 @@ private fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): Json
     originalNode.copyStringChild("minValue", newNode, "fsk:minValue")
     originalNode.copyStringChild("maxValue", newNode, "fsk:maxValue")
     originalNode.copyStringChild("error", newNode, "fsk:error")
-
-    return newNode
-}
-
-private fun convertPredictiveModelGeneralInformation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-    val newNode = mapper.createObjectNode()
-
-    originalNode.copyStringChild("name", newNode, "fsk:name")
-    originalNode.copyStringChild("source", newNode, "fsk:source")
-    originalNode.copyStringChild("identifier", newNode, "fsk:identifier")
-
-    if (originalNode.has("author")) {
-        val newAuthors = newNode.putArray("fsk:author")
-        originalNode["author"].map { convertContact(it, mapper) }.forEach(newAuthors::add)
-    }
-
-    if (originalNode.has("creator")) {
-        val newCreators = newNode.putArray("fsk:creator")
-        originalNode["creator"].map { convertContact(it, mapper) }.forEach(newCreators::add)
-    }
-
-    // TODO: creationDate (LocalDate)
-    // TODO: modificationDate (LocalDate[])
-
-    originalNode.copyStringChild("rights", newNode, "fsk:rights")
-    originalNode.copyStringChild("availability", newNode, "fsk:availability")
-    originalNode.copyStringChild("url", newNode, "fsk:url")
-    originalNode.copyStringChild("format", newNode, "fsk:format")
-
-    if (originalNode.has("reference")) {
-        val newReferences = newNode.putArray("fsk:reference")
-        originalNode["reference"].map { convertContact(it, mapper) }.forEach(newReferences::add)
-    }
-
-    originalNode.copyStringChild("language", newNode, "fsk:language")
-    originalNode.copyStringChild("software", newNode, "fsk:software")
-    originalNode.copyStringChild("languageWrittenIn", newNode, "fsk:languageWrittenIn")
-
-    // TODO: modelCategory
-
-    originalNode.copyStringChild("status", newNode, "fsk:status")
-    originalNode.copyStringChild("objective", newNode, "fsk:objective")
-    originalNode.copyStringChild("description", newNode, "fsk:description")
-
-    return newNode
-}
-
-private fun convertPredictiveModelScope(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-    val newNode = mapper.createObjectNode()
-
-    if (originalNode.has("product")) {
-        val newProducts = newNode.putArray("fsk:product")
-        originalNode["product"].map { convertProduct(it, mapper) }.forEach(newProducts::add)
-    }
-
-    if (originalNode.has("hazard")) {
-        val newHazards = newNode.putArray("fsk:hazard")
-        originalNode["hazard"].map { convertHazard(it, mapper) }.forEach(newHazards::add)
-    }
-
-    originalNode.copyStringChild("generalComment", newNode, "fsk:generalComment")
-    originalNode.copyStringChild("temporalInformation", newNode, "fsk:temporalInformation")
-
-    // TODO: spatial information
-
-    return newNode
-}
-
-private fun convertPredictiveModelDataBackground(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-
-    newNode.set<ObjectNode>("fsk:study", convertStudy(originalNode["study"], mapper))
-
-    if (originalNode.has("studySample")) {
-        val newSamples = newNode.putArray("fsk:studySample")
-        originalNode["studySample"].map { convertStudySample(it, mapper) }.forEach(newSamples::add)
-    }
-
-    if (originalNode.has("laboratory")) {
-        val newLabs = newNode.putArray("fsk:laboratory")
-        originalNode["laboratory"].map { convertLaboratory(it, mapper) }.forEach(newLabs::add)
-    }
-
-    if (originalNode.has("assay")) {
-        val newAssays = newNode.putArray("fsk:assay")
-        originalNode["assay"].map { convertAssay(it, mapper) }.forEach(newAssays::add)
-    }
-
-    return newNode
-}
-
-private fun convertPredictiveModelModelMath(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-
-    if (originalNode.has("parameter")) {
-        val newParameters = newNode.putArray("fsk:parameter")
-        originalNode["parameter"].map { convertParameter(it, mapper) }.forEach(newParameters::add)
-    }
-
-    if (originalNode.has("qualityMeasures")) {
-        val newMeasures = newNode.putArray("fsk:qualityMeasures")
-        originalNode["qualityMeasures"].map { convertQualityMeasures(it, mapper) }.forEach(newMeasures::add)
-    }
-
-    if (originalNode.has("modelEquation")) {
-        val newEquations = newNode.putArray("modelEquation")
-        originalNode["qualityMeasures"].map { convertModelEquation(it, mapper) }.forEach(newEquations::add)
-    }
-
-    originalNode.copyStringChild("fittingProcedure", newNode, "fsk:fittingProcedure")
-
-    if (originalNode.has("event")) {
-        newNode.set<ObjectNode>("event", originalNode["event"])
-    }
 
     return newNode
 }

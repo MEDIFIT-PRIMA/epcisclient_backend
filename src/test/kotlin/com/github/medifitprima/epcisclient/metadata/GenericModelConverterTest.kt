@@ -1,7 +1,6 @@
-package com.github.medifitprima.epcisclient.com.github.medifitprima.epcisclient.metadata
+package com.github.medifitprima.epcisclient.metadata
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.medifitprima.epcisclient.metadata.GenericModelConverter
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertNotNull
