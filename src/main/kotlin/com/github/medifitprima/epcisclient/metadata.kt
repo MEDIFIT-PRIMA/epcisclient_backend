@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.medifitprima.epcisclient.metadata.DataModelConverter
 import com.github.medifitprima.epcisclient.metadata.GenericModelConverter
+import com.github.medifitprima.epcisclient.metadata.OtherModelConverter
 import com.github.medifitprima.epcisclient.metadata.PredictiveModelConverter
 import java.time.LocalDate
 
@@ -40,10 +41,11 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
                 .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "otherModel" -> {
-            objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", convertGenericModelScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", convertGenericModelDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", convertGenericModelModelMath(fskmlMetadata["modelMath"], mapper))
+            val converter = OtherModelConverter()
+            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
+                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
+                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
         }
         "exposureModel" -> {
             objectNode.set<ObjectNode>("fsk:generalInformation", convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
@@ -333,59 +335,6 @@ private fun convertAssay(originalNode: JsonNode, mapper: ObjectMapper): JsonNode
     originalNode.copyStringChild("leftCensoredData", newNode, "fsk:leftCensoredData")
     originalNode.copyStringChild("contaminationRange", newNode, "fsk:contaminationRange")
     originalNode.copyStringChild("uncertaintyValue", newNode, "fsk:uncertaintyValue")
-
-    return newNode
-}
-
-private fun convertParameter(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-    originalNode.copyStringChild("id", newNode, "fsk:id")
-    originalNode.copyStringChild("classification", newNode, "fsk:classification")
-    originalNode.copyStringChild("name", newNode, "fsk:name")
-    originalNode.copyStringChild("description", newNode, "fsk:description")
-    originalNode.copyStringChild("unit", newNode, "fsk:unit")
-    originalNode.copyStringChild("unitCategory", newNode, "fsk:unitCategory")
-    originalNode.copyStringChild("dataType", newNode, "fsk:dataType")
-    originalNode.copyStringChild("source", newNode, "fsk:source")
-    originalNode.copyStringChild("subject", newNode, "fsk:subject")
-    originalNode.copyStringChild("distribution", newNode, "fsk:distribution")
-    originalNode.copyStringChild("value", newNode, "fsk:value")
-    // TODO: reference
-    originalNode.copyStringChild("variabilitySubject", newNode, "fsk:variabilitySubject")
-    originalNode.copyStringChild("minValue", newNode, "fsk:minValue")
-    originalNode.copyStringChild("maxValue", newNode, "fsk:maxValue")
-    originalNode.copyStringChild("error", newNode, "fsk:error")
-
-    return newNode
-}
-
-private fun convertQualityMeasures(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-    originalNode.copyNumericalValue("sse", newNode, "fsk:sse")
-    originalNode.copyNumericalValue("mse", newNode, "fsk:mse")
-    originalNode.copyNumericalValue("rmse", newNode, "fsk:rmse")
-    originalNode.copyNumericalValue("rsquared", newNode, "fsk:rsquared")
-    originalNode.copyNumericalValue("aic", newNode, "fsk:aic")
-    originalNode.copyNumericalValue("bic", newNode, "fsk:bic")
-    originalNode.copyStringChild("sensitivityAnalysis", newNode, "fsk:sensitivityAnalysis")
-
-    return newNode
-}
-
-private fun convertModelEquation(originalNode: JsonNode, mapper: ObjectMapper): JsonNode {
-
-    val newNode = mapper.createObjectNode()
-
-    originalNode.copyStringChild("name", newNode, "fsk:name")
-    originalNode.copyStringChild("modelEquationClass", newNode, "fsk:modelEquationClass")
-    // TODO: reference
-    originalNode.copyStringChild("modelEquation", newNode, "fsk:modelEquation")
-
-    if (originalNode.has("modelHypothesis")) {
-        newNode.set<ObjectNode>("fsk:modelHypothesis", originalNode["modelHypothesis"])
-    }
 
     return newNode
 }
