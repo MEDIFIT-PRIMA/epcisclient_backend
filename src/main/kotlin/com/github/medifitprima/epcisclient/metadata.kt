@@ -2,6 +2,7 @@ package com.github.medifitprima.epcisclient
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.github.medifitprima.epcisclient.metadata.*
 
@@ -13,44 +14,20 @@ fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNo
     val modelType = fskmlMetadata["modelType"]
     objectNode.put("fsk:modelType", convertModelType(modelType.textValue()))
 
-    when (modelType.textValue()) {
-        "genericModel" -> {
-            val converter = GenericModelConverter()
-            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-            objectNode.set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
-            objectNode.set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
-            objectNode.set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
-        }
-        "dataModel" -> {
-            val converter = DataModelConverter()
-            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
-        }
-        "predictiveModel" -> {
-            val converter = PredictiveModelConverter()
-            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
-        }
-        "otherModel" -> {
-            val converter = OtherModelConverter()
-            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
-        }
-        "exposureModel" -> {
-            val converter = ExposureModelConverter()
-            objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
-                .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
-                .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
-                .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
-        }
+    val converter = when (modelType.textValue()) {
+        "genericModel" -> GenericModelConverter()
+        "dataModel" -> DataModelConverter()
+        "predictiveModel" -> PredictiveModelConverter()
+        "otherModel" -> OtherModelConverter()
+        "exposureModel" -> ExposureModelConverter()
+        else -> return NullNode.instance
     }
 
+    objectNode.set<ObjectNode>("fsk:generalInformation", converter.convertGeneralInformation(fskmlMetadata["generalInformation"], mapper))
+        .set<ObjectNode>("fsk:scope", converter.convertScope(fskmlMetadata["scope"], mapper))
+        .set<ObjectNode>("fsk:dataBackground", converter.convertDataBackground(fskmlMetadata["dataBackground"], mapper))
+        .set<ObjectNode>("fsk:modelMath", converter.convertModelMath(fskmlMetadata["modelMath"], mapper))
+    
     return objectNode
 }
 
