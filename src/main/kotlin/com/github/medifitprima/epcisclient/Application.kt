@@ -99,9 +99,21 @@ fun Application.module(testing: Boolean = false) {
                 call.respond(medifitMetadata)
             }
         }
+
+        // Simple search that matches model type, name, software, products and hazards
+        get("/search/{term}") {
+            val models = medifitClient.getSimpleModels()
+
+            call.parameters["term"]?.let { term ->
+                val matchingModels = models.filter {
+                    it.type.contains(term) || it.name.contains(term) || it.software.contains(term) ||
+                            it.products.contains(term) || it.hazards.contains(term)
+                }
+                call.respond(matchingModels)
+            }
+        }
     }
 }
-
 
 
 class MedifitClient(private val token: String) {
