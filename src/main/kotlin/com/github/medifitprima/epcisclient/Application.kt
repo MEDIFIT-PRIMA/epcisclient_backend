@@ -17,11 +17,13 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+//import java.io.File
+
+//import java.io.File
 //import java.io.File.createTempFile
 //import java.nio.file.Files.createTempDirectory
 //import java.nio.file.Files.createTempDirectory
-//import kotlin.io.path.createTempDirectory
-
+import kotlin.io.path.*
 
 val objectMapper = ObjectMapper()
 val medifit_token = ""
@@ -75,10 +77,11 @@ fun Application.module(testing: Boolean = false) {
             multipartData.forEachPart { part ->
                 // if part is a file (could be form item)
                 if (part is PartData.FileItem) {
+                    kotlin.io.path.createTempFile()
                     // retrieve file name of upload
                     val name = part.originalFileName!!
 
-                    val fileCopy = java.io.File.createTempFile(name,tempFolder.toString())
+                    val fileCopy = createTempFile().toFile()
                     fileCopy.deleteOnExit()
 
                     val fileBytes = part.streamProvider().readBytes()
@@ -224,4 +227,4 @@ class MedifitClient(private val token: String) {
     }
 }
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>): Unit = io.ktor.server.tomcat.EngineMain.main(args)
