@@ -20,12 +20,7 @@ class MetadataTest {
         val mapper: ObjectMapper = ObjectMapper().registerModule(KotlinModule()).registerModule(ThreeTenModule())
     }
 
-    @Test
-    fun testConvertGenericModel() {
-        val tree = mapper.readTree(File("src/test/resources/genericModel.json"))
-        val medifitMetadata = createMedifitMetadata(tree, mapper)
-        medifitMetadata.checkMetadata()
-    }
+
     @Test
     fun testAddKeys() {
         val tree = mapper.readTree(File("src/test/resources/model_test2.json"))
@@ -72,53 +67,7 @@ class MetadataTest {
         eventList.add(medifitMetadata)
         event.toPrettyString()
     }
-    @Test
-    fun testConvertPredictiveModel() {
-        val tree = mapper.readTree(File("src/test/resources/predictiveModel.json"))
-        val medifitMetadata = createMedifitMetadata(tree, mapper)
-        medifitMetadata.checkMetadata()
-    }
 
-    @Test
-    fun testConvertDataModel() {
-        val tree = mapper.readTree(File("src/test/resources/dataModel.json"))
-        val medifitMetadata = createMedifitMetadata(tree, mapper)
-        medifitMetadata.checkMetadata()
-    }
-
-    @Test
-    fun testConvertOtherModel() {
-        val tree = mapper.readTree(File("src/test/resources/otherModel.json"))
-        val medifitMetadata = createMedifitMetadata(tree, mapper)
-        medifitMetadata.checkMetadata()
-    }
-
-    @Test
-    fun testConvertExposureModel() {
-        val tree = mapper.readTree(File("src/test/resources/exposureModel.json"))
-        val medifitMetadata = createMedifitMetadata(tree, mapper)
-        medifitMetadata.checkMetadata()
-    }
-
-    // TODO: testConvertToxicologicalModel
-    // TODO: testConvertDoseResponseModel
-    // TODO: testConvertProcessModel
-    // TODO: testConvertConsumptionModel
-    // TODO: testConvertHealthModel
-    // TODO: testConvertRiskModel
-    // TODO: testConvertQraModel
-
-    @Test
-    fun testExtractModelView() {
-        val tree = mapper.readTree(File("src/test/resources/medifit_genericModel.json"))
-        val modelView = extractModelView(tree)
-
-        assertEquals("GenericModel", modelView.type)
-        assertEquals("Toy Model", modelView.name)
-        assertTrue(modelView.software.isEmpty())
-        assertEquals("Oranges", modelView.products[0])
-        assertEquals("Thiabendazole", modelView.hazards[0])
-    }
 }
 
 fun JsonNode.checkMetadata() {

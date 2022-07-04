@@ -31,14 +31,7 @@ tomcat {
 repositories {
     mavenCentral()
 
-    maven {
-        name 'fskml'
-        url 'https://maven.pkg.github.com/silebat/fskml'
-        credentials {
-            username project.findProperty("github.packages.username") ?: System.getenv("GITHUB_NAME")
-            password project.findProperty("github.packages.password") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
+
 }
 mainClassName = "io.ktor.servre.tomcat.EngineMain"
 sourceSets {
@@ -56,17 +49,18 @@ dependencies {
     implementation "io.ktor:ktor-client-cio:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-server-core:$ktor_version"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    //implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "ch.qos.logback:logback-classic:$logback_version"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.9"
     implementation 'com.github.joschi.jackson:jackson-datatype-threetenbp:2.8.11'
 
     // Formats
-    implementation "de.uni-rostock.sbi:CombineArchive:1.4.0"
-    implementation "de.bund.bfr:fskml:1.0.12"
+    implementation "de.uni-rostock.sbi:CombineArchive:1.4.1"
+    //implementation "de.bund.bfr:fskml:1.0.12"
 
-
+   // compile group: 'org.apache.logging.log4j', name:'log4j-api', version: '2.17.1'
+   // compile group: 'org.apache.logging.log4j', name:'log4j-core', version: '2.17.1'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
@@ -83,6 +77,6 @@ compileTestKotlin {
 }
 
 application {
-    mainClassName = 'com.github.medifitprima.epcisclient.ApplicationKt'
+    mainClass.set('com.github.medifitprima.epcisclient.ApplicationKt')
 }
 

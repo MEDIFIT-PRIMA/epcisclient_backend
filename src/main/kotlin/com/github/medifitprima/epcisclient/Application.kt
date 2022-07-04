@@ -31,7 +31,7 @@ val medifitClient = MedifitClient(medifit_token)
 
 val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate.json"))
 
-val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
+//val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
 
 fun Application.module(testing: Boolean = false) {
 
@@ -74,42 +74,46 @@ fun Application.module(testing: Boolean = false) {
             val multipartData = call.receiveMultipart()
 
             var file: File? = null
-            multipartData.forEachPart { part ->
-                // if part is a file (could be form item)
-                if (part is PartData.FileItem) {
-                    kotlin.io.path.createTempFile()
-                    // retrieve file name of upload
-                    val name = part.originalFileName!!
+            try {
+                multipartData.forEachPart { part ->
+                    // if part is a file (could be form item)
+                    if (part is PartData.FileItem) {
 
-                    val fileCopy = createTempFile().toFile()
-                    fileCopy.deleteOnExit()
+                        // retrieve file name of upload
+                        val name = part.originalFileName!!
 
-                    val fileBytes = part.streamProvider().readBytes()
-                    fileCopy.writeBytes(fileBytes)
+                        val fileCopy = createTempFile(name).toFile()
+                        fileCopy.deleteOnExit()
 
-                    file = fileCopy
+                        val fileBytes = part.streamProvider().readBytes()
+                        fileCopy.writeBytes(fileBytes)
+
+                        file = fileCopy
+                    }
+                    // make sure to dispose of the part after use to prevent leaks
+                    part.dispose()
                 }
-                // make sure to dispose of the part after use to prevent leaks
-                part.dispose()
-            }
 
-            if (file != null) {
-                val metadata = readMetadata(file!!, objectMapper)
-                //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
-                val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                //medifitMetadata.set<ObjectNode>()
-                val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper)
-                // TODO: inject medifitMetadata into bodyTemplate and upload to MEDIFIT API
-                //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-                //event.set<ObjectNode>("fsk:model", medifitMetadata)
+                if (file != null) {
+                    val metadata = readMetadata(file!!, objectMapper)
+                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
+                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                    //medifitMetadata.set<ObjectNode>()
+                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper)
+                    
+                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
+                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
 
-                println(bodyTemplate.toPrettyString())
+                    println(bodyTemplate.toPrettyString())
 
-                //medifitClient.uploadModel(bodyTemplate)
+                    //medifitClient.uploadModel(bodyTemplate)
 
-                // TODO: return OK
-                //call.respond(medifitMetadata)
-                call.respond(event.toPrettyString())
+
+                    //call.respond(medifitMetadata)
+                    call.respond(event.toPrettyString())
+                }
+            } finally {
+                file?.delete()
             }
         }
     }
