@@ -17,7 +17,10 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import kotlin.io.path.createTempDirectory
+//import java.io.File.createTempFile
+//import java.nio.file.Files.createTempDirectory
+//import java.nio.file.Files.createTempDirectory
+//import kotlin.io.path.createTempDirectory
 
 
 val objectMapper = ObjectMapper()
@@ -26,7 +29,7 @@ val medifitClient = MedifitClient(medifit_token)
 
 val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate.json"))
 
-val tempFolder = createTempDirectory("uploads")
+val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
 
 fun Application.module(testing: Boolean = false) {
 
@@ -71,7 +74,7 @@ fun Application.module(testing: Boolean = false) {
                     // retrieve file name of upload
                     val name = part.originalFileName!!
 
-                    val fileCopy = kotlin.io.path.createTempFile(tempFolder, name).toFile()
+                    val fileCopy = java.io.File.createTempFile(name,tempFolder.toString())
                     fileCopy.deleteOnExit()
 
                     val fileBytes = part.streamProvider().readBytes()
@@ -85,8 +88,9 @@ fun Application.module(testing: Boolean = false) {
 
             if (file != null) {
                 val metadata = readMetadata(file!!, objectMapper)
-                val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
-
+                //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
+                val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                //medifitMetadata.set<ObjectNode>()
                 // TODO: inject medifitMetadata into bodyTemplate and upload to MEDIFIT API
                 val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
                 event.set<ObjectNode>("fsk:model", medifitMetadata)
@@ -106,7 +110,7 @@ fun Application.module(testing: Boolean = false) {
 
 class MedifitClient(private val token: String) {
 
-    private val url = "https://demo-repository.openepcis.io"
+    private val url = "https://epcis.medifit-prima.net/"
 
     suspend fun getModels(): List<JsonNode> = withContext(Dispatchers.IO) {
 

@@ -8,13 +8,24 @@
       {
         "title": "Dr",
         "familyName": "Doe",
-        "givenName": "Jane",
+        "givenName": "Janett",
         "email": "janedoe@gmail.com",
         "telephone": "080 12345566",
         "streetAddress": "Berliner Strasse 2",
         "country": "Germany",
         "region": "Berlin-Brandenburg",
         "gender": "female",
+        "organization": "NYU"
+      },{
+        "title": "Dr",
+        "familyName": "Zart",
+        "givenName": "Moe",
+        "email": "moe.zart@gmail.com",
+        "telephone": "080 12345566",
+        "streetAddress": "asdf asf 2",
+        "country": "Germany",
+        "region": "Berlin-Brandenburg",
+        "gender": "male",
         "organization": "NYU"
       }
     ],
@@ -359,14 +370,14 @@
           "Accredited"
         ],
         "name": "National High Magnetic Field Laboratory",
-        "country": "United States"
+        "country": "US"
       },
       {
         "accreditation": [
           "Third party assessment"
         ],
         "name": "Everest Medical Laboratory",
-        "country": "India"
+        "country": "IN"
       }
     ],
     "assay": [

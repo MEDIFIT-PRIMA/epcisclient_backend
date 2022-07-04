@@ -4,8 +4,46 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.ValueNode
 import java.time.LocalDate
 
+
+fun prepareEpcisBody(
+
+    jsonNode: JsonNode,
+    mapper: ObjectMapper
+):JsonNode {
+    var jsonBody : JsonNode
+
+    var prefix = "fskx:"
+    if (jsonNode.isObject) {
+        val objectNode_new = mapper.createObjectNode()
+        val objectNode = jsonNode as ObjectNode
+        val iter = objectNode.fields()
+
+        while (iter.hasNext()) {
+            val entry = iter.next()
+            objectNode_new.set<ObjectNode>(prefix + entry.key, prepareEpcisBody(entry.value, mapper))
+        }
+        jsonBody = objectNode_new
+    } else {
+        if(jsonNode.isArray){
+            val arrayNode = jsonNode as ArrayNode
+            val arrayNode_new = mapper.createArrayNode()
+            for (i in 0 until arrayNode.size()) {
+                if(arrayNode[i].toString() != "null"){
+                    arrayNode_new.add(prepareEpcisBody(arrayNode[i],mapper))
+                }
+
+            }
+            jsonBody = arrayNode_new
+        } else {
+
+            jsonBody = jsonNode as ValueNode
+        }
+    }
+   return jsonBody
+}
 fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNode {
 
     val objectNode = mapper.createObjectNode()
