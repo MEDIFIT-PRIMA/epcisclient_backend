@@ -53,6 +53,10 @@ fun Application.module(testing: Boolean = false) {
             val models = medifitClient.getModels()
             call.respond(models)
         }
+        get("/hello") {
+
+            call.respond("hello world")
+        }
 
         get("/simplemodels") {
             val models = medifitClient.getSimpleModels()
@@ -91,16 +95,18 @@ fun Application.module(testing: Boolean = false) {
                 //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
                 val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
                 //medifitMetadata.set<ObjectNode>()
+                val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper)
                 // TODO: inject medifitMetadata into bodyTemplate and upload to MEDIFIT API
-                val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-                event.set<ObjectNode>("fsk:model", medifitMetadata)
+                //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
+                //event.set<ObjectNode>("fsk:model", medifitMetadata)
 
                 println(bodyTemplate.toPrettyString())
 
-                medifitClient.uploadModel(bodyTemplate)
+                //medifitClient.uploadModel(bodyTemplate)
 
                 // TODO: return OK
-                call.respond(medifitMetadata)
+                //call.respond(medifitMetadata)
+                call.respond(event.toPrettyString())
             }
         }
     }

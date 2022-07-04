@@ -44,6 +44,12 @@ class MetadataTest {
                         "bizTransaction": "http://transaction.acme.com/po/12345679"
                     }""".trimIndent()
         bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
+
+//        val readPointObject = """{
+//                        "id": "urn:epc:id:sgln:0123456.78912.44"
+//                    }""".trimIndent()
+        bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
+        //medifitMetadata.set<ObjectNode>("readPoint", mapper.readTree(readPointObject) as ObjectNode)
         medifitMetadata.set<ArrayNode>("bizTransactionList", bisTransactionListJson)
 
             val body = """{

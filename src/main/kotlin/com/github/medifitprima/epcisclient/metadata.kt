@@ -44,6 +44,49 @@ fun prepareEpcisBody(
     }
    return jsonBody
 }
+fun createMedifitMetadataNew(medifitMetadata: ObjectNode, mapper: ObjectMapper): ObjectNode{
+    medifitMetadata.put("type","ObjectEvent")
+    medifitMetadata.put("eventID","urn:uuid:5d3c82cc-3fb2-4b70-af4a-914f1f839c5b")
+    medifitMetadata.put("eventTimeZoneOffset","+02:00")
+    medifitMetadata.put("eventTime","2022-06-16T08:14:16Z")
+    medifitMetadata.put("action","ADD")
+    medifitMetadata.put("bizStep","commissioning")
+    medifitMetadata.put("disposition","completeness_inferred")
+    val bisTransactionListJson = mapper.createArrayNode()
+    val bisTransactionObject = """{
+                        "type": "urn:epcglobal:cbv:btt:po",
+                        "bizTransaction": "http://transaction.acme.com/po/12345679"
+                    }""".trimIndent()
+    bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
+
+//        val readPointObject = """{
+//                        "id": "urn:epc:id:sgln:0123456.78912.44"
+//                    }""".trimIndent()
+    bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
+    //medifitMetadata.set<ObjectNode>("readPoint", mapper.readTree(readPointObject) as ObjectNode)
+    medifitMetadata.set<ArrayNode>("bizTransactionList", bisTransactionListJson)
+
+    val body = """{
+                "@context": [
+                    "https://gs1.github.io/EPCIS/epcis-context.jsonld",
+                    {
+                        "fskx": "https://medifit-prima.github.io/fsklab-json/1.0.4/FSKModel.json"
+                    }
+                ],
+                "id": "fskx:test:document5",
+                "type": "EPCISDocument",
+                "schemaVersion": "2.0",
+                "creationDate": "2021-03-03T11:30:47.0Z",
+                "epcisBody": {
+                    "eventList": []
+                    }
+                 }""".trimIndent()
+    val event = mapper.readTree(body) as ObjectNode//mapper.createObjectNode()
+    val eventList = event.get("epcisBody").get("eventList") as ArrayNode
+    eventList.add(medifitMetadata)
+    event.toPrettyString()
+    return event
+}
 fun createMedifitMetadata(fskmlMetadata: JsonNode, mapper: ObjectMapper): JsonNode {
 
     val objectNode = mapper.createObjectNode()
