@@ -46,6 +46,8 @@ fun Application.module(testing: Boolean = false) {
         header(HttpHeaders.ContentType)
         header(HttpHeaders.AccessControlAllowOrigin)
         allowCredentials = true
+        header("api-key")
+        header("api-key-secret")
         anyHost()
     }
 
@@ -106,7 +108,7 @@ fun Application.module(testing: Boolean = false) {
 
                     println(bodyTemplate.toPrettyString())
 
-                    //medifitClient.uploadModel(bodyTemplate)
+                    medifitClient.uploadModel(event)
 
 
                     //call.respond(medifitMetadata)
@@ -133,6 +135,7 @@ class MedifitClient(private val token: String) {
             // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
             val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
                 contentType(ContentType.Application.Json)
+
                 body = """
             {
                 "queryType": "events",
@@ -221,11 +224,14 @@ class MedifitClient(private val token: String) {
         HttpClient().use { client ->
             val response: HttpResponse = client.post("$url/capture") {
                 headers {
-                    append(HttpHeaders.Authorization, token)
+                    //append(HttpHeaders.Authorization, token)
+                    append("API-KEY", "A9RapVJn2DmvuX5T7sUHRZyLLKIER46y")
+                    append("API-KEY-SECRET","ZZMLpjm9ccBR60hqZD5iwtMph33iZ7fVyYUVNU8jDmGUIksaUDiHZRPzJDrM616t")
                 }
                 contentType(ContentType.Application.Json)
                 body = bodyParameter.toPrettyString()
             }
+            val location = response.headers.get("Location")
             println("Upload response: " + response.status)
         }
     }
