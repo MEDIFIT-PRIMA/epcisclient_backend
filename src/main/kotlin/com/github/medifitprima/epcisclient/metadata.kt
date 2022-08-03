@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ValueNode
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 
 fun prepareEpcisBody(
@@ -44,27 +46,35 @@ fun prepareEpcisBody(
     }
    return jsonBody
 }
-fun createMedifitMetadataNew(medifitMetadata: ObjectNode, mapper: ObjectMapper): ObjectNode{
+fun createMedifitMetadataNew(medifitMetadata: ObjectNode,
+                             mapper: ObjectMapper,
+                             downloadUrl:String): ObjectNode{
     medifitMetadata.put("type","ObjectEvent")
-    medifitMetadata.put("eventID","urn:uuid:5d3c82cc-3fb2-4b70-af4a-914f1f839c5b")
-    medifitMetadata.put("eventTimeZoneOffset","+02:00")
-    medifitMetadata.put("eventTime","2022-06-16T08:14:16Z")
+    medifitMetadata.put("eventID","urn:uuid:" + UUID.randomUUID())
+    //medifitMetadata.put("eventTimeZoneOffset","+02:00")
+    medifitMetadata.put("eventTimeZoneOffset", getTimeZoneOffset())
+    //medifitMetadata.put("eventTime","2022-06-16T08:14:16Z")
+    medifitMetadata.put("eventTime", getEventTime())
     medifitMetadata.put("action","ADD")
     medifitMetadata.put("bizStep","commissioning")
     medifitMetadata.put("disposition","completeness_inferred")
     val bisTransactionListJson = mapper.createArrayNode()
     val bisTransactionObject = """{
-                        "type": "urn:epcglobal:cbv:btt:po",
-                        "bizTransaction": "http://transaction.acme.com/po/12345679"
-                    }""".trimIndent()
+                        "type": "po",
+                        "bizTransaction": "$downloadUrl"
+                    }""".trimIndent() // //"urn:epcglobal:cbv:btt:testprd",
     bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
 
-//        val readPointObject = """{
-//                        "id": "urn:epc:id:sgln:0123456.78912.44"
-//                    }""".trimIndent()
-    bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
-    //medifitMetadata.set<ObjectNode>("readPoint", mapper.readTree(readPointObject) as ObjectNode)
+        val readPointObject = """{
+                        "id": "fskx:microhibro"
+                    }""".trimIndent()
+    //bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
+    medifitMetadata.set<ObjectNode>("readPoint", mapper.readTree(readPointObject) as ObjectNode)
     medifitMetadata.set<ArrayNode>("bizTransactionList", bisTransactionListJson)
+
+    val epcList = mapper.createArrayNode()
+    epcList.add("fskx:model:" + getModelIdentifier(medifitMetadata))//UUID.randomUUID())
+    medifitMetadata.set<ArrayNode>("epcList", epcList)
 
     val body = """{
                 "@context": [
@@ -76,7 +86,7 @@ fun createMedifitMetadataNew(medifitMetadata: ObjectNode, mapper: ObjectMapper):
                 "id": "fskx:test:document5",
                 "type": "EPCISDocument",
                 "schemaVersion": "2.0",
-                "creationDate": "2021-03-03T11:30:47.0Z",
+                "creationDate": "${getEventTime()}",
                 "epcisBody": {
                     "eventList": []
                     }
@@ -87,8 +97,22 @@ fun createMedifitMetadataNew(medifitMetadata: ObjectNode, mapper: ObjectMapper):
     event.toPrettyString()
     return event
 }
+fun getEventTime():String{
+    //val date = -(Calendar.get(Calendar.ZONE_OFFSET) + Calendar.get(Calendar.DST_OFFSET)) / (60 * 1000)
 
+    return LocalDateTime.now().toString() + "Z"
+}
+fun getTimeZoneOffset():String{
 
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault())
+    val timeZone = SimpleDateFormat("Z").format(calendar.time)
+    return timeZone.substring(0, 3) + ":" + timeZone.substring(3, 5)
+
+}
+fun getModelIdentifier(medifitMetadata: ObjectNode):String{
+    val identifier = medifitMetadata.get("fskx:generalInformation").get("fskx:identifier")
+    return identifier.textValue()
+}
 /** Utility data class for the API. Instead of sending the complete original metadata only keeps a subset used in the
  * frontend. */
 data class ModelView(

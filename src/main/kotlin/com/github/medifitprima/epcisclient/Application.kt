@@ -1,5 +1,11 @@
 package com.github.medifitprima.epcisclient
 
+//import java.io.File
+
+//import java.io.File
+//import java.io.File.createTempFile
+//import java.nio.file.Files.createTempDirectory
+//import java.nio.file.Files.createTempDirectory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -17,13 +23,13 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-//import java.io.File
-
-//import java.io.File
-//import java.io.File.createTempFile
-//import java.nio.file.Files.createTempDirectory
-//import java.nio.file.Files.createTempDirectory
+import java.io.InputStream
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import kotlin.io.path.*
+
 
 val objectMapper = ObjectMapper()
 val medifit_token = ""
@@ -72,7 +78,7 @@ fun Application.module(testing: Boolean = false) {
          * Body parameter: form data.
          * - file: Binary object
          */
-        post("/upload") {
+        post("/uploadFile") {
             val multipartData = call.receiveMultipart()
 
             var file: File? = null
@@ -101,7 +107,7 @@ fun Application.module(testing: Boolean = false) {
                     //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
                     val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
                     //medifitMetadata.set<ObjectNode>()
-                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper)
+                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper,"https://google.com")
                     
                     //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
                     //event.set<ObjectNode>("fsk:model", medifitMetadata)
@@ -118,10 +124,46 @@ fun Application.module(testing: Boolean = false) {
                 file?.delete()
             }
         }
+
+        post("/uploadURL") {
+            val mUrl = call.receive<UrlJsonObject>()
+            var file: File? = null
+                try {
+                    val url: URL = URL(mUrl.url)
+                    // retrieve file name of upload
+                    val name = "model.fskx"
+                    val fileCopy = createTempFile(name)
+                    url.openStream().use { Files.copy(it, fileCopy,StandardCopyOption.REPLACE_EXISTING) }
+                    file = fileCopy.toFile()
+                    if (file != null) {
+                        val metadata = readMetadata(file!!, objectMapper)
+                        //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
+                        val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                        //medifitMetadata.set<ObjectNode>()
+                        val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+
+                        //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
+                        //event.set<ObjectNode>("fsk:model", medifitMetadata)
+
+                        println(bodyTemplate.toPrettyString())
+
+                        //medifitClient.uploadModel(event)
+
+
+                        //call.respond(medifitMetadata)
+                        call.respond(event)
+                    }
+                } finally {
+                    file?.delete()
+                }
+
+        }
     }
+
+
 }
 
-
+data class UrlJsonObject(val url: String)
 
 class MedifitClient(private val token: String) {
 
