@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ValueNode
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
+
 import java.util.*
+import java.util.Locale
 
 
 fun prepareEpcisBody(
@@ -59,14 +60,15 @@ fun createMedifitMetadataNew(medifitMetadata: ObjectNode,
     medifitMetadata.put("bizStep","commissioning")
     medifitMetadata.put("disposition","completeness_inferred")
     val bisTransactionListJson = mapper.createArrayNode()
+    //downloadURL:
     val bisTransactionObject = """{
-                        "type": "po",
-                        "bizTransaction": "$downloadUrl"
+                        "type": "testprd",
+                        "bizTransaction": "fskx:$downloadUrl"
                     }""".trimIndent() // //"urn:epcglobal:cbv:btt:testprd",
     bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
 
         val readPointObject = """{
-                        "id": "fskx:microhibro"
+                        "id": "fskx:bfr"
                     }""".trimIndent()
     //bisTransactionListJson.add( mapper.readTree(bisTransactionObject) as ObjectNode)
     medifitMetadata.set<ObjectNode>("readPoint", mapper.readTree(readPointObject) as ObjectNode)
@@ -78,7 +80,7 @@ fun createMedifitMetadataNew(medifitMetadata: ObjectNode,
 
     val body = """{
                 "@context": [
-                    "https://gs1.github.io/EPCIS/epcis-context.jsonld",
+                    "https://ref.gs1.org/standards/epcis/epcis-context.jsonld",
                     {
                         "fskx": "https://medifit-prima.github.io/fsklab-json/1.0.4/FSKModel.json"
                     }
@@ -99,8 +101,15 @@ fun createMedifitMetadataNew(medifitMetadata: ObjectNode,
 }
 fun getEventTime():String{
     //val date = -(Calendar.get(Calendar.ZONE_OFFSET) + Calendar.get(Calendar.DST_OFFSET)) / (60 * 1000)
+    //val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault())
+    //val lt: LocalDateTime = LocalDateTime.now()
+    //var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    val now = Date()
 
-    return LocalDateTime.now().toString() + "Z"
+    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+    return simpleDateFormat.format(now).toString().dropLast(2)+ ":00"
+    //return lt.format(formatter).toString()
+    //return LocalDateTime.now().toString() + "Z"
 }
 fun getTimeZoneOffset():String{
 
@@ -155,4 +164,48 @@ fun extractModelView(model: JsonNode): ModelView {
     }
 
     return ModelView(modelType, name, software, products, hazards)
+}
+
+fun createExecutionEventBody(model_id: String,
+                             model_name: String,
+                             mapper: ObjectMapper): ObjectNode {
+    val body = """{
+        "@context": [
+            "https://ref.gs1.org/standards/epcis/epcis-context.jsonld",
+            {
+                "fskx": "https://medifit-prima.github.io/fsklab-json/1.0.4/FSKModel.json"
+            }
+        ],
+        "id": "fskx:test:document5",
+        "type": "EPCISDocument",
+        "schemaVersion": "2.0",
+        "creationDate": "${getEventTime()}",
+        "epcisBody": {
+            "eventList": [
+                {
+                    "fskx:modelType": "genericModel",
+                    "fskx:generalInformation": {
+                        "fskx:identifier": "$model_id",
+                        "fskx:name": "$model_name"
+                    },
+                    "type": "ObjectEvent",
+                    "action": "OBSERVE",
+                    "bizStep": "commissioning",
+                    "disposition": "active",
+                    "epcList": [
+                        "fskx:model:$model_id"
+                    ],
+                    "eventTime": "${getEventTime()}",
+                    "eventTimeZoneOffset": "${getTimeZoneOffset()}",
+                    "readPoint": {
+                        "id":  "fskx:bfr"
+                    }
+                    
+                }
+            ]
+        }
+    }""".trimIndent()
+
+    val event = mapper.readTree(body) as ObjectNode//mapper.createObjectNode()
+    return event
 }

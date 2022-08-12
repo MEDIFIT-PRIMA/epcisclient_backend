@@ -125,7 +125,7 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
-        post("/uploadURL") {
+        post("/registerModelURL") {
             val mUrl = call.receive<UrlJsonObject>()
             var file: File? = null
                 try {
@@ -147,15 +147,36 @@ fun Application.module(testing: Boolean = false) {
 
                         println(bodyTemplate.toPrettyString())
 
-                        //medifitClient.uploadModel(event)
+                        val capture_id = medifitClient.uploadModel(event)?:"Error"
 
 
                         //call.respond(medifitMetadata)
+                        //call.respond(capture_id)
                         call.respond(event)
                     }
                 } finally {
                     file?.delete()
                 }
+
+        }
+
+        post("/captureExecutionEvent") {
+            val executionEventParameters = call.receive<ExecutionEvent>()
+
+            try {
+                val model_id: String = executionEventParameters.model_id
+                val model_name: String = executionEventParameters.model_name
+                val event = createExecutionEventBody(model_id, model_name, objectMapper)
+                val capture_id = medifitClient.uploadModel(event)?:"Error"
+
+
+
+                call.respond(capture_id)
+                //call.respond(event)
+
+            } catch (exception: Exception){
+                call.respond(exception)
+            }
 
         }
     }
@@ -164,6 +185,7 @@ fun Application.module(testing: Boolean = false) {
 }
 
 data class UrlJsonObject(val url: String)
+data class ExecutionEvent(val model_id: String, val model_name: String)
 
 class MedifitClient(private val token: String) {
 
@@ -262,7 +284,7 @@ class MedifitClient(private val token: String) {
         return emptyList()
     }
 
-    suspend fun uploadModel(bodyParameter: JsonNode) {
+    suspend fun uploadModel(bodyParameter: JsonNode): String? {
         HttpClient().use { client ->
             val response: HttpResponse = client.post("$url/capture") {
                 headers {
@@ -275,6 +297,7 @@ class MedifitClient(private val token: String) {
             }
             val location = response.headers.get("Location")
             println("Upload response: " + response.status)
+            return location
         }
     }
 }
