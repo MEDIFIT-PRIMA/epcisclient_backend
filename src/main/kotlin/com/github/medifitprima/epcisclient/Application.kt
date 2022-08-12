@@ -23,11 +23,10 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.InputStream
 import java.net.URL
 import java.nio.file.Files
-import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import java.util.*
 import kotlin.io.path.*
 
 
@@ -56,6 +55,9 @@ fun Application.module(testing: Boolean = false) {
         header("api-key-secret")
         anyHost()
     }
+
+
+
 
     routing {
 
@@ -114,7 +116,7 @@ fun Application.module(testing: Boolean = false) {
 
                     println(bodyTemplate.toPrettyString())
 
-                    medifitClient.uploadModel(event)
+                    medifitClient.captureEvent(event)
 
 
                     //call.respond(medifitMetadata)
@@ -147,11 +149,11 @@ fun Application.module(testing: Boolean = false) {
 
                         println(bodyTemplate.toPrettyString())
 
-                        val capture_id = medifitClient.uploadModel(event)?:"Error"
+                        val capture_id = medifitClient.captureEvent(event)?:"Error"
 
 
                         //call.respond(medifitMetadata)
-                        //call.respond(capture_id)
+                        //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   call.respond(capture_id)
                         call.respond(event)
                     }
                 } finally {
@@ -167,7 +169,7 @@ fun Application.module(testing: Boolean = false) {
                 val model_id: String = executionEventParameters.model_id
                 val model_name: String = executionEventParameters.model_name
                 val event = createExecutionEventBody(model_id, model_name, objectMapper)
-                val capture_id = medifitClient.uploadModel(event)?:"Error"
+                val capture_id = medifitClient.captureEvent(event)?:"Error"
 
 
 
@@ -190,7 +192,9 @@ data class ExecutionEvent(val model_id: String, val model_name: String)
 class MedifitClient(private val token: String) {
 
     private val url = "https://epcis.medifit-prima.net/"
-
+    val appConfiguration :Properties = loadConfiguration()
+    private val api_key = appConfiguration.getProperty("api-key")?:""
+    private val api_key_secret = appConfiguration.getProperty("api-key-secret")?:""
     suspend fun getModels(): List<JsonNode> = withContext(Dispatchers.IO) {
 
         val models: MutableList<JsonNode>
@@ -284,13 +288,13 @@ class MedifitClient(private val token: String) {
         return emptyList()
     }
 
-    suspend fun uploadModel(bodyParameter: JsonNode): String? {
+    suspend fun captureEvent(bodyParameter: JsonNode): String? {
         HttpClient().use { client ->
             val response: HttpResponse = client.post("$url/capture") {
                 headers {
                     //append(HttpHeaders.Authorization, token)
-                    append("API-KEY", "A9RapVJn2DmvuX5T7sUHRZyLLKIER46y")
-                    append("API-KEY-SECRET","ZZMLpjm9ccBR60hqZD5iwtMph33iZ7fVyYUVNU8jDmGUIksaUDiHZRPzJDrM616t")
+                    append("API-KEY",api_key)
+                    append("API-KEY-SECRET",api_key_secret)
                 }
                 contentType(ContentType.Application.Json)
                 body = bodyParameter.toPrettyString()
@@ -301,5 +305,27 @@ class MedifitClient(private val token: String) {
         }
     }
 }
+fun loadConfiguration(): Properties {
 
+    val properties = Properties()
+
+    val configFileInUserFolder = File(System.getProperty("user.home"), "epcis_backend.properties")
+
+    if (configFileInUserFolder.exists()) {
+        configFileInUserFolder.inputStream().use {
+            properties.load(it)
+        }
+    } else {
+        val catalinaFolder = System.getProperty("catalina.home")
+        if (catalinaFolder != null && File(catalinaFolder, "epcis_backend.properties").exists()) {
+            File(catalinaFolder, "epcis_backend.properties").inputStream().use {
+                properties.load(it)
+            }
+        } else {
+            error("Configuration file not found")
+        }
+    }
+
+    return properties
+}
 fun main(args: Array<String>): Unit = io.ktor.server.tomcat.EngineMain.main(args)
