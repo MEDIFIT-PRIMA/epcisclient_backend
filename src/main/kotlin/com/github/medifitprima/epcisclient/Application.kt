@@ -61,71 +61,65 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
 
-        get("/models") {
-            val models = medifitClient.getModels()
-            call.respond(models)
-        }
+
         get("/hello") {
 
             call.respond("hello world")
         }
 
-        get("/simplemodels") {
-            val models = medifitClient.getSimpleModels()
-            call.respond(models)
-        }
+
 
         /*
          * Upload metadata from passed model file.
          * Body parameter: form data.
          * - file: Binary object
          */
-        post("/uploadFile") {
-            val multipartData = call.receiveMultipart()
-
-            var file: File? = null
-            try {
-                multipartData.forEachPart { part ->
-                    // if part is a file (could be form item)
-                    if (part is PartData.FileItem) {
-
-                        // retrieve file name of upload
-                        val name = part.originalFileName!!
-
-                        val fileCopy = createTempFile(name).toFile()
-                        fileCopy.deleteOnExit()
-
-                        val fileBytes = part.streamProvider().readBytes()
-                        fileCopy.writeBytes(fileBytes)
-
-                        file = fileCopy
-                    }
-                    // make sure to dispose of the part after use to prevent leaks
-                    part.dispose()
-                }
-
-                if (file != null) {
-                    val metadata = readMetadata(file!!, objectMapper)
-                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
-                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                    //medifitMetadata.set<ObjectNode>()
-                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper,"https://google.com")
-                    
-                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
-
-                    println(bodyTemplate.toPrettyString())
-
-                    medifitClient.captureEvent(event)
-
-
-                    //call.respond(medifitMetadata)
-                    call.respond(event.toPrettyString())
-                }
-            } finally {
-                file?.delete()
-            }
-        }
+//        post("/uploadFile") {
+//            val multipartData = call.receiveMultipart()
+//
+//            var file: File? = null
+//            try {
+//                multipartData.forEachPart { part ->
+//                    // if part is a file (could be form item)
+//                    if (part is PartData.FileItem) {
+//
+//                        // retrieve file name of upload
+//                        val name = part.originalFileName!!
+//
+//                        val fileCopy = createTempFile(name).toFile()
+//                        fileCopy.deleteOnExit()
+//
+//                        val fileBytes = part.streamProvider().readBytes()
+//                        fileCopy.writeBytes(fileBytes)
+//
+//                        file = fileCopy
+//                    }
+//                    // make sure to dispose of the part after use to prevent leaks
+//                    part.dispose()
+//                }
+//
+//                if (file != null) {
+//                    val metadata = readMetadata(file!!, objectMapper)
+//                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
+//                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+//                    //medifitMetadata.set<ObjectNode>()
+//                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper,"https://google.com")
+//
+//                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
+//                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
+//
+//                    println(bodyTemplate.toPrettyString())
+//
+//                    medifitClient.captureEvent(event)
+//
+//
+//                    //call.respond(medifitMetadata)
+//                    call.respond(event.toPrettyString())
+//                }
+//            } finally {
+//                file?.delete()
+//            }
+//        }
 
         post("/registerModelURL") {
             val mUrl = call.receive<UrlJsonObject>()
@@ -153,7 +147,8 @@ fun Application.module(testing: Boolean = false) {
 
 
                         //call.respond(medifitMetadata)
-                        //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   call.respond(capture_id)
+                        // all.respond(capture_id)
+                        call.response.header("Location", capture_id)
                         call.respond(event)
                     }
                 } finally {
