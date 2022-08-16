@@ -6,9 +6,11 @@ package com.github.medifitprima.epcisclient
 //import java.io.File.createTempFile
 //import java.nio.file.Files.createTempDirectory
 //import java.nio.file.Files.createTempDirectory
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import de.unirostock.sems.cbarchive.Utils.BUFFER_SIZE
 import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -23,7 +25,9 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.net.URL
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.*
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.*
@@ -154,6 +158,65 @@ fun Application.module(testing: Boolean = false) {
                 } finally {
                     file?.delete()
                 }
+
+        }
+
+        post("/registerModelURLProxy") {
+            val mUrl = call.receive<UrlJsonObject>()
+            var file: File? = null
+            try {
+                val url: URL = URL(mUrl.url)
+                val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(" http://webproxy.bfr.bund.de", 8080))
+
+                val conn: URLConnection = url.openConnection(proxy)
+                // opens input stream from the HTTP connection
+                // opens input stream from the HTTP connectioCognac$187n
+
+                val inputStream: InputStream = conn.getInputStream()
+                val name = "model.fskx"
+                val fileCopy = createTempFile(name)
+                //val saveFilePath: String = saveDir.toString() + File.separator + fileName
+
+                // opens an output stream to save into file
+
+                // opens an output stream to save into file
+                val outputStream = FileOutputStream(fileCopy.absolutePathString())
+
+                var bytesRead = -1
+                val buffer = ByteArray(BUFFER_SIZE)
+                while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
+
+                outputStream.close()
+                inputStream.close()
+                // retrieve file name of upload
+
+                //url.openStream().use { Files.copy(it, fileCopy,StandardCopyOption.REPLACE_EXISTING) }
+                file = fileCopy.toFile()
+                if (file != null) {
+                    val metadata = readMetadata(file!!, objectMapper)
+                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
+                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                    //medifitMetadata.set<ObjectNode>()
+                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+
+                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
+                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
+
+                    println(bodyTemplate.toPrettyString())
+
+                    val capture_id = medifitClient.captureEvent(event)?:"Error"
+
+
+                    //call.respond(medifitMetadata)
+                    // all.respond(capture_id)
+                    call.response.header("Location", capture_id)
+                    call.respond(event)
+                }
+            } finally {
+                file?.delete()
+            }
 
         }
 
