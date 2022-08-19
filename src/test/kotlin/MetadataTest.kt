@@ -7,12 +7,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.fasterxml.jackson.datatype.threetenbp.ThreeTenModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import jdk.nashorn.internal.objects.NativeRegExp.test
 import org.json.simple.JSONObject
 import org.junit.Test
 import java.io.File
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+//import kotlin.test.assertEquals
+//import kotlin.test.assertTrue
 
 class MetadataTest {
 
@@ -70,10 +71,10 @@ class MetadataTest {
 
 }
 
-fun JsonNode.checkMetadata() {
-    assertTrue(has("fsk:modelType"))
-    assertTrue(has("fsk:generalInformation"))
-    assertTrue(has("fsk:scope"))
-    assertTrue(has("fsk:dataBackground"))
-    assertTrue(has("fsk:modelMath"))
-}
+//fun JsonNode.checkMetadata() {
+//    assertTrue(has("fsk:modelType"))
+//    assertTrue(has("fsk:generalInformation"))
+//    assertTrue(has("fsk:scope"))
+//    assertTrue(has("fsk:dataBackground"))
+//    assertTrue(has("fsk:modelMath"))
+//}

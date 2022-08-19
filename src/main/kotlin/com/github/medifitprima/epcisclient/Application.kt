@@ -13,6 +13,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import de.unirostock.sems.cbarchive.Utils.BUFFER_SIZE
 import io.ktor.application.*
 import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.engine.ProxyBuilder.http
+import io.ktor.client.engine.apache.*
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.features.*
@@ -22,8 +27,12 @@ import io.ktor.jackson.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.apache.http.HttpHost
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -32,6 +41,9 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.*
 import kotlin.io.path.*
+import io.ktor.client.engine.java.*
+import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 
 
 val objectMapper = ObjectMapper()
@@ -42,6 +54,7 @@ val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate
 
 //val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
 
+@InternalAPI
 fun Application.module(testing: Boolean = false) {
 
     install(CallLogging)
@@ -51,6 +64,7 @@ fun Application.module(testing: Boolean = false) {
 
     install(CORS) {
         method(HttpMethod.Get)
+        //method(HttpMethod.Post)
         header(HttpHeaders.AccessControlAllowHeaders)
         header(HttpHeaders.ContentType)
         header(HttpHeaders.AccessControlAllowOrigin)
@@ -69,115 +83,24 @@ fun Application.module(testing: Boolean = false) {
         get("/hello") {
 
             call.respond("hello world")
-        }
-
-
-
-        /*
-         * Upload metadata from passed model file.
-         * Body parameter: form data.
-         * - file: Binary object
-         */
-//        post("/uploadFile") {
-//            val multipartData = call.receiveMultipart()
-//
-//            var file: File? = null
-//            try {
-//                multipartData.forEachPart { part ->
-//                    // if part is a file (could be form item)
-//                    if (part is PartData.FileItem) {
-//
-//                        // retrieve file name of upload
-//                        val name = part.originalFileName!!
-//
-//                        val fileCopy = createTempFile(name).toFile()
-//                        fileCopy.deleteOnExit()
-//
-//                        val fileBytes = part.streamProvider().readBytes()
-//                        fileCopy.writeBytes(fileBytes)
-//
-//                        file = fileCopy
-//                    }
-//                    // make sure to dispose of the part after use to prevent leaks
-//                    part.dispose()
-//                }
-//
-//                if (file != null) {
-//                    val metadata = readMetadata(file!!, objectMapper)
-//                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
-//                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-//                    //medifitMetadata.set<ObjectNode>()
-//                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper,"https://google.com")
-//
-//                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-//                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
-//
-//                    println(bodyTemplate.toPrettyString())
-//
-//                    medifitClient.captureEvent(event)
-//
-//
-//                    //call.respond(medifitMetadata)
-//                    call.respond(event.toPrettyString())
-//                }
-//            } finally {
-//                file?.delete()
-//            }
-//        }
-
-        post("/registerModelURL") {
-            val mUrl = call.receive<UrlJsonObject>()
-            var file: File? = null
-                try {
-                    val url: URL = URL(mUrl.url)
-                    // retrieve file name of upload
-                    val name = "model.fskx"
-                    val fileCopy = createTempFile(name)
-                    url.openStream().use { Files.copy(it, fileCopy,StandardCopyOption.REPLACE_EXISTING) }
-                    file = fileCopy.toFile()
-                    if (file != null) {
-                        val metadata = readMetadata(file!!, objectMapper)
-                        //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
-                        val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                        //medifitMetadata.set<ObjectNode>()
-                        val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
-
-                        //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-                        //event.set<ObjectNode>("fsk:model", medifitMetadata)
-
-                        println(bodyTemplate.toPrettyString())
-
-                        val capture_id = medifitClient.captureEvent(event)?:"Error"
-
-
-                        //call.respond(medifitMetadata)
-                        // all.respond(capture_id)
-                        call.response.header("Location", capture_id)
-                        call.respond(event)
-                    }
-                } finally {
-                    file?.delete()
-                }
 
         }
 
-        post("/registerModelURLProxy") {
+
+        post("/captureModelEvent") {
             val mUrl = call.receive<UrlJsonObject>()
+
             var file: File? = null
             try {
                 val url: URL = URL(mUrl.url)
-                val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(" http://webproxy.bfr.bund.de", 8080))
+                val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("webproxy", 8080))
 
                 val conn: URLConnection = url.openConnection(proxy)
                 // opens input stream from the HTTP connection
-                // opens input stream from the HTTP connectioCognac$187n
 
                 val inputStream: InputStream = conn.getInputStream()
                 val name = "model.fskx"
                 val fileCopy = createTempFile(name)
-                //val saveFilePath: String = saveDir.toString() + File.separator + fileName
-
-                // opens an output stream to save into file
 
                 // opens an output stream to save into file
                 val outputStream = FileOutputStream(fileCopy.absolutePathString())
@@ -192,33 +115,74 @@ fun Application.module(testing: Boolean = false) {
                 inputStream.close()
                 // retrieve file name of upload
 
-                //url.openStream().use { Files.copy(it, fileCopy,StandardCopyOption.REPLACE_EXISTING) }
                 file = fileCopy.toFile()
                 if (file != null) {
                     val metadata = readMetadata(file!!, objectMapper)
-                    //val medifitMetadata = createMedifitMetadata(metadata, objectMapper)
                     val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                    //medifitMetadata.set<ObjectNode>()
                     val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
-
-                    //val event = bodyTemplate.get("epcisBody").get("eventList").get(0) as ObjectNode
-                    //event.set<ObjectNode>("fsk:model", medifitMetadata)
-
-                    println(bodyTemplate.toPrettyString())
-
                     val capture_id = medifitClient.captureEvent(event)?:"Error"
 
 
-                    //call.respond(medifitMetadata)
-                    // all.respond(capture_id)
                     call.response.header("Location", capture_id)
                     call.respond(event)
                 }
-            } finally {
+            }catch(e:Exception){
+                call.respond("Error: " + e)
+            }
+            finally {
                 file?.delete()
             }
-
         }
+        /*
+         * Upload metadata from passed model file.
+         * Body parameter: form data.
+         * - file: Binary object
+         */
+        post("/captureModelEventFromFile") {
+            val multipartData = call.receiveMultipart()
+
+            var file: File? = null
+            try {
+                val url:URL = URL(call.request.header("url")?:"https://google.com")
+
+                multipartData.forEachPart { part ->
+                    // if part is a file (could be form item)
+                    if (part is PartData.FileItem) {
+
+                        // retrieve file name of upload
+                        val name = part.originalFileName!!
+
+                        val fileCopy = createTempFile(name).toFile()
+                        fileCopy.deleteOnExit()
+
+                        val fileBytes = part.streamProvider().readBytes()
+                        fileCopy.writeBytes(fileBytes)
+
+                        file = fileCopy
+                    }
+                    // make sure to dispose of the part after use to prevent leaks
+                    part.dispose()
+                }
+
+                if (file != null) {
+                    val metadata = readMetadata(file!!, objectMapper)
+                    val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+                    val capture_id = medifitClient.captureEvent(event)?:"Error"
+
+                    call.response.header("Location", capture_id)
+
+                    call.respond(event)
+                }
+            }catch(e:Exception){
+                call.respond("Error: " + e)
+            }  finally {
+                file?.delete()
+            }
+        }
+
+
+
 
         post("/captureExecutionEvent") {
             val executionEventParameters = call.receive<ExecutionEvent>()
@@ -231,14 +195,17 @@ fun Application.module(testing: Boolean = false) {
 
 
 
-                call.respond(capture_id)
                 //call.respond(event)
+                call.respond(capture_id)
 
             } catch (exception: Exception){
                 call.respond(exception)
             }
 
         }
+
+
+
     }
 
 
@@ -246,6 +213,8 @@ fun Application.module(testing: Boolean = false) {
 
 data class UrlJsonObject(val url: String)
 data class ExecutionEvent(val model_id: String, val model_name: String)
+// on ice until outside connection is possible by internal servers
+
 
 class MedifitClient(private val token: String) {
 
@@ -253,107 +222,43 @@ class MedifitClient(private val token: String) {
     val appConfiguration :Properties = loadConfiguration()
     private val api_key = appConfiguration.getProperty("api-key")?:""
     private val api_key_secret = appConfiguration.getProperty("api-key-secret")?:""
-    suspend fun getModels(): List<JsonNode> = withContext(Dispatchers.IO) {
 
-        val models: MutableList<JsonNode>
 
-        HttpClient().use { client ->
-            // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
-            val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
-                contentType(ContentType.Application.Json)
 
-                body = """
-            {
-                "queryType": "events",
-                "query": {
-                    "@context": {
-                        "fsk": "https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json"
-                    },
-                    "EQ_INNER_fsk:modelType": [
-                        "GenericModel",
-                        "DataModel",
-                        "PredictiveModel",
-                        "OtherModel",
-                        "ExposureModel",
-                        "ToxicologicalModel",
-                        "DoseResponseModel",
-                        "ProcessModel",
-                        "ConsumptionModel",
-                        "HealthModel",
-                        "RiskModel",
-                        "QraModel"
-                    ]
-                }
-            }
-        """.trimIndent()
-            }
 
-            if (response.status == HttpStatusCode.OK) {
-                models = mutableListOf()
-                val jsonResponse = objectMapper.readTree(response.readText())
-                val eventList2 = jsonResponse.get("eventList")
-                eventList2.forEach { models.add(it.get("fsk:model")) }
-            } else {
-                models = mutableListOf()
-            }
-        }
-
-        models
-    }
-
-    suspend fun getSimpleModels(): List<ModelView> {
-
-        HttpClient().use { client ->
-            // The body parameter of /queries/SimpleEventQuery seems to be NamedQueryMetaData in the spec definition
-            val response: HttpResponse = client.post("$url/queries/SimpleEventQuery") {
-                contentType(ContentType.Application.Json)
-                body = """
-            {
-                "queryType": "events",
-                "query": {
-                    "@context": {
-                        "fsk": "https://foodrisklabs.bfr.bund.de/fsk-lab-schema.json"
-                    },
-                    "EQ_INNER_fsk:modelType": [
-                        "GenericModel",
-                        "DataModel",
-                        "PredictiveModel",
-                        "OtherModel",
-                        "ExposureModel",
-                        "ToxicologicalModel",
-                        "DoseResponseModel",
-                        "ProcessModel",
-                        "ConsumptionModel",
-                        "HealthModel",
-                        "RiskModel",
-                        "QraModel"
-                    ]
-                }
-            }
-        """.trimIndent()
-            }
-
-            if (response.status == HttpStatusCode.OK) {
-                val jsonResponse: JsonNode = withContext(Dispatchers.Default) {
-                    objectMapper.readTree(response.readText())
-                }
-                val eventList = jsonResponse.get("eventList")
-
-                return eventList.map { it["fsk:model"] }.map { extractModelView(it) }
-            }
-        }
-
-        return emptyList()
-    }
-
+    @InternalAPI
     suspend fun captureEvent(bodyParameter: JsonNode): String? {
-        HttpClient().use { client ->
+
+        HttpClient(Apache)
+        {
+            engine {
+                // this: ApacheEngineConfig
+                followRedirects = true
+                socketTimeout = 10_000
+                connectTimeout = 10_000
+                connectionRequestTimeout = 20_000
+                customizeClient {
+                    // this: HttpAsyncClientBuilder
+                    setProxy(HttpHost("webproxy", 8080))
+                    setMaxConnTotal(1000)
+                    setMaxConnPerRoute(100)
+                    // ...
+                }
+                customizeRequest {
+                    // this: RequestConfig.Builder
+                }
+            }
+        }
+            .use { client ->
             val response: HttpResponse = client.post("$url/capture") {
                 headers {
                     //append(HttpHeaders.Authorization, token)
+                    append(HttpHeaders.Connection,"keep-alive")
+                    append(HttpHeaders.AccessControlAllowOrigin,"*/*")
                     append("API-KEY",api_key)
                     append("API-KEY-SECRET",api_key_secret)
                 }
+
                 contentType(ContentType.Application.Json)
                 body = bodyParameter.toPrettyString()
             }

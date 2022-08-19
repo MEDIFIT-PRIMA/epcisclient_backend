@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'application'
 }
 apply plugin: 'kotlin'
@@ -45,6 +45,8 @@ dependencies {
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:$tomcat_version",
             "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcat_version"
     implementation "io.ktor:ktor-server-tomcat:$ktor_version"
+    implementation("io.ktor:ktor-client-apache:$ktor_version")
+    implementation("io.ktor:ktor-client-java:$ktor_version")
 
     implementation "io.ktor:ktor-client-cio:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"

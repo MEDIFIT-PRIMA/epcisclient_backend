@@ -26,7 +26,9 @@ fun prepareEpcisBody(
 
         while (iter.hasNext()) {
             val entry = iter.next()
-            objectNode_new.set<ObjectNode>(prefix + entry.key, prepareEpcisBody(entry.value, mapper))
+            if(entry.value.toString() != "null") {
+                objectNode_new.set<ObjectNode>(prefix + entry.key, prepareEpcisBody(entry.value, mapper))
+            }
         }
         jsonBody = objectNode_new
     } else {
