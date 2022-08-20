@@ -13,11 +13,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import de.unirostock.sems.cbarchive.Utils.BUFFER_SIZE
 import io.ktor.application.*
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.*
-import io.ktor.client.engine.ProxyBuilder.http
 import io.ktor.client.engine.apache.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.features.*
@@ -28,22 +24,13 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.apache.http.HttpHost
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.*
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.*
 import kotlin.io.path.*
-import io.ktor.client.engine.java.*
-import io.ktor.util.cio.*
-import io.ktor.utils.io.*
 
 
 val objectMapper = ObjectMapper()

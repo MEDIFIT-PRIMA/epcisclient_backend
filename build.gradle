@@ -46,7 +46,6 @@ dependencies {
             "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcat_version"
     implementation "io.ktor:ktor-server-tomcat:$ktor_version"
     implementation("io.ktor:ktor-client-apache:$ktor_version")
-    implementation("io.ktor:ktor-client-java:$ktor_version")
 
     implementation "io.ktor:ktor-client-cio:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
