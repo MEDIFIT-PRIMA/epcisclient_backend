@@ -36,7 +36,8 @@ import kotlin.io.path.*
 val objectMapper = ObjectMapper()
 val medifit_token = ""
 val medifitClient = MedifitClient(medifit_token)
-
+var appHostname:String = "webproxy"
+var appSocket:Int = 8080
 val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate.json"))
 
 //val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
@@ -72,7 +73,22 @@ fun Application.module(testing: Boolean = false) {
             call.respond("hello world")
 
         }
+        get("/getProxy") {
 
+            call.respond(appHostname + ": " + appSocket)
+
+        }
+        post("/setProxy") {
+            val mproxy = call.receive<ProxyObject>()
+            try {
+                appHostname = mproxy.proxyHost
+                appSocket = mproxy.proxySocket
+                call.respond("proxy set to " + appHostname + ": " + appSocket)
+            } catch(e:Exception){
+                call.respond(e)
+            }
+
+        }
 
         post("/captureModelEvent") {
             val mUrl = call.receive<UrlJsonObject>()
@@ -80,9 +96,9 @@ fun Application.module(testing: Boolean = false) {
             var file: File? = null
             try {
                 val url: URL = URL(mUrl.url)
-                val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("webproxy", 8080))
+                //val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("webproxy", 8080))
 
-                val conn: URLConnection = url.openConnection(proxy)
+                val conn: URLConnection = url.openConnection()
                 // opens input stream from the HTTP connection
 
                 val inputStream: InputStream = conn.getInputStream()
@@ -114,7 +130,45 @@ fun Application.module(testing: Boolean = false) {
                     call.respond(event)
                 }
             }catch(e:Exception){
-                call.respond("Error: " + e)
+                try{
+                    val url: URL = URL(mUrl.url)
+                    val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(appHostname, appSocket))
+
+                    val conn: URLConnection = url.openConnection(proxy)
+                    // opens input stream from the HTTP connection
+
+                    val inputStream: InputStream = conn.getInputStream()
+                    val name = "model.fskx"
+                    val fileCopy = createTempFile(name)
+
+                    // opens an output stream to save into file
+                    val outputStream = FileOutputStream(fileCopy.absolutePathString())
+
+                    var bytesRead = -1
+                    val buffer = ByteArray(BUFFER_SIZE)
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+
+                    outputStream.close()
+                    inputStream.close()
+                    // retrieve file name of upload
+
+                    file = fileCopy.toFile()
+                    if (file != null) {
+                        val metadata = readMetadata(file!!, objectMapper)
+                        val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
+                        val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+                        val capture_id = medifitClient.captureEventProxy(event)?:"Error"
+
+
+                        call.response.header("Location", capture_id)
+                        call.respond(event)
+                    }
+                } catch(ee:Exception){
+                    call.respond("Error: " + e + " " + ee)
+                }
+
             }
             finally {
                 file?.delete()
@@ -186,7 +240,16 @@ fun Application.module(testing: Boolean = false) {
                 call.respond(capture_id)
 
             } catch (exception: Exception){
-                call.respond(exception)
+                try{
+                    val model_id: String = executionEventParameters.model_id
+                    val model_name: String = executionEventParameters.model_name
+                    val event = createExecutionEventBody(model_id, model_name, objectMapper)
+                    val capture_id = medifitClient.captureEventProxy(event)?:"Error"
+                    call.respond(capture_id)
+                }catch (exception2: Exception){
+                    call.respond(exception2)
+                }
+
             }
 
         }
@@ -199,6 +262,7 @@ fun Application.module(testing: Boolean = false) {
 }
 
 data class UrlJsonObject(val url: String)
+data class ProxyObject(val proxyHost: String, val proxySocket:Int)
 data class ExecutionEvent(val model_id: String, val model_name: String)
 // on ice until outside connection is possible by internal servers
 
@@ -226,7 +290,7 @@ class MedifitClient(private val token: String) {
                 connectionRequestTimeout = 20_000
                 customizeClient {
                     // this: HttpAsyncClientBuilder
-                    setProxy(HttpHost("webproxy", 8080))
+                    //setProxy(HttpHost("webproxy", 8080))
                     setMaxConnTotal(1000)
                     setMaxConnPerRoute(100)
                     // ...
@@ -253,6 +317,48 @@ class MedifitClient(private val token: String) {
             println("Upload response: " + response.status)
             return location
         }
+    }
+    @InternalAPI
+    suspend fun captureEventProxy(bodyParameter: JsonNode): String? {
+
+        HttpClient(Apache)
+        {
+            engine {
+                // this: ApacheEngineConfig
+                followRedirects = true
+                socketTimeout = 10_000
+                connectTimeout = 10_000
+                connectionRequestTimeout = 20_000
+                customizeClient {
+                    // this: HttpAsyncClientBuilder
+                    setProxy(HttpHost(appHostname, appSocket))
+
+                    setMaxConnTotal(1000)
+                    setMaxConnPerRoute(100)
+                    // ...
+                }
+                customizeRequest {
+                    // this: RequestConfig.Builder
+                }
+            }
+        }
+            .use { client ->
+                val response: HttpResponse = client.post("$url/capture") {
+                    headers {
+                        //append(HttpHeaders.Authorization, token)
+                        append(HttpHeaders.Connection,"keep-alive")
+                        append(HttpHeaders.AccessControlAllowOrigin,"*/*")
+                        append("API-KEY",api_key)
+                        append("API-KEY-SECRET",api_key_secret)
+                    }
+
+                    contentType(ContentType.Application.Json)
+                    body = bodyParameter.toPrettyString()
+                }
+                val location = response.headers.get("Location")
+                println("Upload response: " + response.status)
+                return location
+            }
     }
 }
 fun loadConfiguration(): Properties {
