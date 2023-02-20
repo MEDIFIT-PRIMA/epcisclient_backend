@@ -39,7 +39,7 @@ val medifitClient = MedifitClient(medifit_token)
 var appHostname:String = "webproxy"
 var appSocket:Int = 8080
 val bodyTemplate = objectMapper.readTree({}.javaClass.getResource("/bodyTemplate.json"))
-
+val subscriptionEvents:MutableList<JsonNode> = mutableListOf<JsonNode>()
 //val tempFolder = java.nio.file.Files.createTempDirectory("uploads")
 
 @InternalAPI
@@ -88,6 +88,18 @@ fun Application.module(testing: Boolean = false) {
                 call.respond(e)
             }
 
+        }
+        post("/receiveSubscriptionEvent"){
+            val b = call.receive<JsonNode>()
+            subscriptionEvents.add(b)
+            call.respond(HttpStatusCode.OK)
+        }
+        get("/eventUpdate"){
+            call.respond(subscriptionEvents)
+        }
+        get("/clearEventUpdate"){
+            subscriptionEvents.clear()
+            call.respond(HttpStatusCode.OK)
         }
 
         post("/captureModelEvent") {
