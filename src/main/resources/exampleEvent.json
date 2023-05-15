@@ -1,0 +1,220 @@
+{
+  "@context": [
+    "https://ref.gs1.org/standards/epcis/epcis-context.jsonld",
+    {
+      "fskx": "https://medifit-prima.github.io/fsklab-json/1.0.4/FSKModel.json"
+    }
+  ],
+  "id": "fskx:test:document5",
+  "type": "EPCISDocument",
+  "schemaVersion": "2.0",
+  "creationDate": "2022-08-23T16:06:33.590+02:00",
+  "epcisBody": {
+    "eventList": [
+      {
+        "fskx:modelType": "genericModel",
+        "fskx:generalInformation": {
+          "fskx:name": "Lara & Possas (2022)",
+          "fskx:source": "PUBLISHED SCIENTIFIC STUDIES: Predictive microbial models and underlying data",
+          "fskx:identifier": "Lara_&_Possas_(2022)_535",
+          "fskx:creator": [
+            {
+              "fskx:title": "Dr.",
+              "fskx:familyName": "Perez rodriguez",
+              "fskx:givenName": "Fernando",
+              "fskx:email": "b42perof@uco.es",
+              "fskx:streetAddress": "University of Cordoba - Rabanales - Department of Food Bromatology and Technology",
+              "fskx:country": "Spain",
+              "fskx:region": "Andalusia",
+              "fskx:organization": "University of Cordoba"
+            }
+          ],
+          "fskx:rights": "Other",
+          "fskx:availability": "true",
+          "fskx:format": ".fskx",
+          "fskx:reference": [
+            {
+              "fskx:isReferenceDescription": true,
+              "fskx:authorList": "J6zsef Baranyi *, Terry A. Roberts",
+              "fskx:title": "A dynamic approach to predicting bacterial growth in food",
+              "fskx:journal": "International Journal of Food Microbiology",
+              "fskx:volume": "23, 277-294",
+              "fskx:status": "Published"
+            },
+            {
+              "fskx:isReferenceDescription": true,
+              "fskx:authorList": "Ratkowsky, D.A., Olley, J., McMeekin, T.A., Ball, A.",
+              "fskx:title": "Relationship between temperature and growth rate of bacterial cultures",
+              "fskx:journal": "Journal of Bacteriology",
+              "fskx:volume": "149:1-5",
+              "fskx:status": "Published"
+            }
+          ],
+          "fskx:language": "Spanish",
+          "fskx:software": "MicroHibro",
+          "fskx:languageWrittenIn": "R",
+          "fskx:modelCategory": {
+            "fskx:modelClass": "Predictive model",
+            "fskx:modelSubClass": [
+              "GROWTH"
+            ],
+            "fskx:basicProcess": [
+              "GROWTH"
+            ]
+          },
+          "fskx:description": "Model validated in Burgos cheese at temperatures 10-30 degrees and water activity from 0.97-0.99"
+        },
+        "fskx:scope": {
+          "fskx:product": [
+            {
+              "fskx:name": "Queso",
+              "fskx:unit": "g"
+            }
+          ],
+          "fskx:hazard": [
+            {
+              "fskx:type": "Microorganisms",
+              "fskx:name": "Staphylococcus aureus"
+            }
+          ]
+        },
+        "fskx:dataBackground": {
+          "fskx:study": {}
+        },
+        "fskx:modelMath": {
+          "fskx:parameter": [
+            {
+              "fskx:id": "Nt",
+              "fskx:classification": "OUTPUT",
+              "fskx:name": "Nt",
+              "fskx:unit": "log10(count)",
+              "fskx:unitCategory": "NUMBER",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "0",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "0"
+            },
+            {
+              "fskx:id": "y0",
+              "fskx:classification": "INPUT",
+              "fskx:name": "y0",
+              "fskx:unit": "log10(count)",
+              "fskx:unitCategory": "NUMBER",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "3",
+              "fskx:minValue": "-10",
+              "fskx:maxValue": "20"
+            },
+            {
+              "fskx:id": "umax",
+              "fskx:classification": "OUTPUT",
+              "fskx:name": "umax",
+              "fskx:unit": "count",
+              "fskx:unitCategory": "NUMBER",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "0.1",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "10"
+            },
+            {
+              "fskx:id": "t",
+              "fskx:classification": "INPUT",
+              "fskx:name": "t",
+              "fskx:unit": "h",
+              "fskx:unitCategory": "TIME",
+              "fskx:dataType": "VECTOROFNUMBERS",
+              "fskx:value": "seq(from = 0, to = 10000, by= 100)",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "10000"
+            },
+            {
+              "fskx:id": "lag",
+              "fskx:classification": "INPUT",
+              "fskx:name": "lag",
+              "fskx:unit": "h",
+              "fskx:unitCategory": "TIME",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "0",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "10000"
+            },
+            {
+              "fskx:id": "m",
+              "fskx:classification": "INPUT",
+              "fskx:name": "m",
+              "fskx:unit": "Dimensionless",
+              "fskx:unitCategory": "DIMENSIONLESS QUANTITY",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "1",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "10"
+            },
+            {
+              "fskx:id": "ymax",
+              "fskx:classification": "INPUT",
+              "fskx:name": "ymax",
+              "fskx:unit": "log10(count)",
+              "fskx:unitCategory": "NUMBER",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "9",
+              "fskx:minValue": "-10",
+              "fskx:maxValue": "20"
+            },
+            {
+              "fskx:id": "b",
+              "fskx:classification": "CONSTANT",
+              "fskx:name": "b",
+              "fskx:unit": "undefined",
+              "fskx:unitCategory": "DIMENSIONLESS QUANTITY",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "0.0124",
+              "fskx:minValue": "0",
+              "fskx:maxValue": "100"
+            },
+            {
+              "fskx:id": "Temp",
+              "fskx:classification": "INPUT",
+              "fskx:name": "Temp",
+              "fskx:unit": "count",
+              "fskx:unitCategory": "NUMBER",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "15",
+              "fskx:minValue": "10",
+              "fskx:maxValue": "30"
+            },
+            {
+              "fskx:id": "Tmin",
+              "fskx:classification": "CONSTANT",
+              "fskx:name": "Tmin",
+              "fskx:unit": "°C",
+              "fskx:unitCategory": "TEMPERATURE",
+              "fskx:dataType": "NUMBER",
+              "fskx:value": "2.37",
+              "fskx:minValue": "-100",
+              "fskx:maxValue": "100"
+            }
+          ]
+        },
+        "type": "ObjectEvent",
+        "eventID": "urn:uuid:df924cc2-7b33-4905-ab3a-3f3417e752f5",
+        "eventTimeZoneOffset": "+02:00",
+        "eventTime": "2022-08-23T16:06:33.581+02:00",
+        "action": "ADD",
+        "bizStep": "commissioning",
+        "disposition": "completeness_inferred",
+        "readPoint": {
+          "id": "fskx:microhibro"
+        },
+        "bizTransactionList": [
+          {
+            "type": "testprd",
+            "bizTransaction": "fskx:https://microhibro.signlab.es/models/search?id=535&auth_key=NuLXWjyQAY1IFFVwNFpwDOAAua7GY8sXiwYhJiUD&fskx_type=nested"
+          }
+        ],
+        "epcList": [
+          "fskx:model:Lara_&_Possas_(2022)_535"
+        ]
+      }
+    ]
+  }
+}

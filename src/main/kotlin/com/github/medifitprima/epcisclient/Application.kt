@@ -75,7 +75,7 @@ fun Application.module(testing: Boolean = false) {
         }
         get("/getProxy") {
 
-            call.respond(appHostname + ": " + appSocket)
+            call.respond("$appHostname: $appSocket")
 
         }
         post("/setProxy") {
@@ -83,7 +83,7 @@ fun Application.module(testing: Boolean = false) {
             try {
                 appHostname = mproxy.proxyHost
                 appSocket = mproxy.proxySocket
-                call.respond("proxy set to " + appHostname + ": " + appSocket)
+                call.respond("proxy set to $appHostname: $appSocket")
             } catch(e:Exception){
                 call.respond(e)
             }
@@ -107,7 +107,7 @@ fun Application.module(testing: Boolean = false) {
 
             var file: File? = null
             try {
-                val url: URL = URL(mUrl.url)
+                val url = URL(mUrl.url)
                 //val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("webproxy", 8080))
 
                 val conn: URLConnection = url.openConnection()
@@ -134,7 +134,7 @@ fun Application.module(testing: Boolean = false) {
                 if (file != null) {
                     val metadata = readMetadata(file!!, objectMapper)
                     val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+                    val event = createEpcisAddEvent(medifitMetadata as ObjectNode, objectMapper, url.toString())
                     val capture_id = medifitClient.captureEvent(event)?:"Error"
 
 
@@ -143,8 +143,8 @@ fun Application.module(testing: Boolean = false) {
                 }
             }catch(e:Exception){
                 try{
-                    val url: URL = URL(mUrl.url)
-                    val proxy:Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(appHostname, appSocket))
+                    val url = URL(mUrl.url)
+                    val proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress(appHostname, appSocket))
 
                     val conn: URLConnection = url.openConnection(proxy)
                     // opens input stream from the HTTP connection
@@ -170,7 +170,7 @@ fun Application.module(testing: Boolean = false) {
                     if (file != null) {
                         val metadata = readMetadata(file!!, objectMapper)
                         val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                        val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+                        val event = createEpcisAddEvent(medifitMetadata as ObjectNode, objectMapper, url.toString())
                         val capture_id = medifitClient.captureEventProxy(event)?:"Error"
 
 
@@ -178,7 +178,7 @@ fun Application.module(testing: Boolean = false) {
                         call.respond(event)
                     }
                 } catch(ee:Exception){
-                    call.respond("Error: " + e + " " + ee)
+                    call.respond("Error: $e $ee")
                 }
 
             }
@@ -220,7 +220,7 @@ fun Application.module(testing: Boolean = false) {
                 if (file != null) {
                     val metadata = readMetadata(file!!, objectMapper)
                     val medifitMetadata = prepareEpcisBody(metadata, objectMapper)
-                    val event = createMedifitMetadataNew(medifitMetadata as ObjectNode, objectMapper, url.toString())
+                    val event = createEpcisAddEvent(medifitMetadata as ObjectNode, objectMapper, url.toString())
                     val capture_id = medifitClient.captureEvent(event)?:"Error"
 
                     call.response.header("Location", capture_id)
@@ -228,7 +228,7 @@ fun Application.module(testing: Boolean = false) {
                     call.respond(event)
                 }
             }catch(e:Exception){
-                call.respond("Error: " + e)
+                call.respond("Error: $e")
             }  finally {
                 file?.delete()
             }
